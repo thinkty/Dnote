@@ -4,6 +4,25 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 
+// Register Page
+
+// Login Page
+
+// Main Page
+class Note extends React.Component {
+
+}
+class SearchBar extends React.Component {
+
+}
+class CreateNoteWindow extends React.Component {
+
+}
+
+// Profile Page
+
+// Search Note Page
+
 ReactDOM.render(<App />, document.getElementById('root'));
 
 // If you want your app to work offline and load faster, you can change
