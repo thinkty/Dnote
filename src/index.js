@@ -4,6 +4,8 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 
+
+// TODO: Modularize all these components by class and import them to use it
 // Register Page
 
 // Login Page
