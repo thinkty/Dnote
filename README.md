@@ -16,6 +16,6 @@ I plan to utilize:
 > Heroku (hosting)
 
 ## Resources
-https://whatwebcando.today/storage.html
+Tailwind CSS - https://tailwindcss.com/
 
-https://whatwebcando.today/files.html
+Figma Resource - https://www.coredesignsystem.com/
