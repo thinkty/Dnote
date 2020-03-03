@@ -7,7 +7,7 @@ I plan to utilize:
 
 > React (frontend)
 
-> TailwindCSS (frontend)
+> Material UI (frontend)
 
 > Node.js (backend)
 
