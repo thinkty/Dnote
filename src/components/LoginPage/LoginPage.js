@@ -55,13 +55,21 @@ export default class LoginPage extends Component {
         // basic parameter validation (email, pw)
         if (!this.state.email.match(/[a-z0-9A-Z]+@[a-z0-9A-Z]+.[a-z0-9A-Z]+/g)) {
             alert('Email Incorrect');
+            this.setState({
+                email: "",
+                pw: this.state.pw
+            });
             return;
         }
         if (this.state.pw.length < 8) {
             alert('Password is too short');
+            this.setState({
+                email: this.state.email,
+                pw: ""
+            });
             return;
         }
-        //TODO: alphanumeric
+        //TODO: check alphanumeric
 
         //TODO: implement the authentication part
 

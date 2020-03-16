@@ -5,7 +5,8 @@
  */
 
 import React, { Component } from 'react';
-import { Typography } from '@material-ui/core';
+import Topbar from '../Topbar';
+import { AppBar } from '@material-ui/core';
 
 export default class MainFeedPage extends Component {
 
@@ -27,11 +28,12 @@ export default class MainFeedPage extends Component {
     render() {
         return (
             <div>
-                <Typography
-                variant="h1"
+                <AppBar
+                color="transparent"
                 >
-                    Hi
-                </Typography>
+                    <Topbar/>
+                </AppBar>
+                
             </div>
         )
     }
