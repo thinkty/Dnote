@@ -6,7 +6,7 @@
 
 import React, { Component } from 'react';
 import Topbar from '../Topbar';
-import { AppBar } from '@material-ui/core';
+import { AppBar, Grid } from '@material-ui/core';
 
 export default class MainFeedPage extends Component {
 
@@ -27,14 +27,30 @@ export default class MainFeedPage extends Component {
     
     render() {
         return (
-            <div>
+            <Grid
+            container
+            direction="column"
+            justify="center"
+            alignItems="center"
+            >
                 <AppBar
                 color="transparent"
                 >
                     <Topbar/>
                 </AppBar>
-                
-            </div>
+                <Grid
+                item
+                xs
+                >
+                    <br/><br/><br/><br/>
+                </Grid>
+                <Grid
+                item
+                xs
+                >
+                    <h1>hello</h1>
+                </Grid>
+            </Grid>
         )
     }
 }

@@ -1,11 +1,11 @@
 /**
  * React component for notes
  * It should display the following contents:
- *      - title
- *      - content
- *      - language or tool
- *      - creation time
- *      - tags
+ *  - title
+ *  - content
+ *  - language or tool
+ *  - creation time
+ *  - tags
  */
 
 import React, { Component } from 'react';
