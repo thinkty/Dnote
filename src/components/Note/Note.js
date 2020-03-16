@@ -5,22 +5,25 @@
  *  - content
  *  - language or tool
  *  - creation time
+ *  - reference
  *  - tags
  */
 
 import React, { Component } from 'react';
-import { Grid, Divider, SvgIcon } from '@material-ui/core';
+import { Grid, Card, CardContent, Typography } from '@material-ui/core';
 import Icon from '../Icons';
 
 export default class Post extends Component {
 
     constructor(props) {
+        super(props);
         this.state = {
-            title: props.title,
-            content: props.content,
-            lantool: props.lantool,
-            time: props.time,
-            tags: props.tags
+            title: props.data.title,
+            content: props.data.content,
+            lantool: props.data.lantool,
+            time: props.data.time,
+            reference: props.data.reference,
+            tags: props.data.tags
         }
     }
 
@@ -28,23 +31,37 @@ export default class Post extends Component {
         return (
             <div>
                 <Grid
+                    item
                     container
-                    spacing={0}
+                    spacing={2}
                     direction="row"
                     justify="center"
                     alignItems="center"
                 >
-                    <Grid item>
-                        <Icon name={this.state.lantool}/>
-                    </Grid>
-                    <Divider/>
-                    <Grid item xs={6}>
-                        {/* The content */}
-                    </Grid>
-                    <Divider/>
-                    <Grid item>
-                        {/* Menu */}
-                    </Grid>
+                    <Card
+                    raised
+                    >
+                        <CardContent>
+                            <Grid 
+                            item
+                            >
+                                <Icon name={this.state.lantool}/>
+                            </Grid>
+                            <Grid 
+                            item
+                            >
+                                <Typography>
+                                    {this.state.content}
+                                </Typography>
+                            </Grid>
+                            <Grid 
+                            item
+                            >
+                                <h1>menu</h1>
+                            </Grid>
+                        </CardContent>
+                    </Card>
+
                 </Grid>
             </div>
         )

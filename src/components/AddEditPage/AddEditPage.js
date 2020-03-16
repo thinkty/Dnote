@@ -4,6 +4,7 @@
  *  - title
  *  - content
  *  - language or tool
+ *  - reference (link to the webpage)
  *  - tags
  * of the note
  */

@@ -196,7 +196,7 @@ export default class LoginPage extends Component {
                             direction="row"
                             justify="center"
                             alignItems="center"
-                            spacing={1}
+                            spacing={0}
                             >
                                 <Grid
                                 item

@@ -7,9 +7,11 @@
 
 import React, { Component } from 'react';
 
+
 export default class Icon extends Component {
 
     constructor(props) {
+        super(props);
         this.state = {
             name: props.name,
             svg: ""
@@ -17,8 +19,14 @@ export default class Icon extends Component {
     }
 
     componentDidMount() {
+
+        /*
         // take the plain svg first, and if not exist, take "-original.svg"
         let path = "devicon/icons/" + this.state.name + "/" + this.state.name + "-plain.svg";
+        let request = new XMLHttpRequest();
+        request.open("GET", path, false);
+
+
         import(path)
         .then((icon) => {
             this.setState({
@@ -34,14 +42,16 @@ export default class Icon extends Component {
                 svg: import(path)
             });
         });
+        */
     }
 
 
     render() {
         return (
-            <svg viewBox="0 0 128 128">
-                {icon}
-            </svg>
+            <h1>Icon</h1>
+            // <svg viewBox="0 0 128 128">
+            //     {this.state.svg}
+            // </svg>
         )
     }
 }
