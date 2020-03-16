@@ -46,6 +46,7 @@ export default function App() {
                 <Switch>
                     <Route exact path="/" component={LoginPage} />
                     <Route exact path="/home" component={MainPage} />
+                    <Route exact path="/signup" component={MainPage} />
                 </Switch>
             </Router>
         </ThemeProvider>

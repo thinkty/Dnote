@@ -15,8 +15,9 @@ export default class LoginPage extends Component {
         this.state = {
             email: "",
             pw: "",
-            successful: false
-        }
+            successful: false,
+            signup: false
+        };
 
         // TODO: Auto login
     }
@@ -54,13 +55,15 @@ export default class LoginPage extends Component {
         // basic parameter validation (email, pw)
         if (!this.state.email.match(/[a-z0-9A-Z]+@[a-z0-9A-Z]+.[a-z0-9A-Z]+/g)) {
             alert('Email Incorrect');
+            return;
         }
         if (this.state.pw.length < 8) {
             alert('Password is too short');
+            return;
         }
         //TODO: alphanumeric
 
-        // TODO: implement the authentication part
+        //TODO: implement the authentication part
 
         // redirection after successful authentication
         this.setState({
@@ -68,7 +71,16 @@ export default class LoginPage extends Component {
         });
     }
 
+    /**
+     * Handle register link clicked
+     */
+    handleRegister = () => {
 
+        // redirection
+        this.setState({
+            signup: true
+        });
+    }
 
 
     render() {
@@ -80,6 +92,9 @@ export default class LoginPage extends Component {
             }}/>;
         }
 
+        if (this.state.signup) {
+            return <Redirect exact from="/" push to="/signup" />;
+        }
 
         return (
             <Grid
@@ -98,7 +113,7 @@ export default class LoginPage extends Component {
                         direction="column"
                         justify="center"
                         alignItems="center"
-                        spacing={1}
+                        spacing={2}
                         >
                             <Typography
                             variant="h2"
@@ -114,7 +129,6 @@ export default class LoginPage extends Component {
                                 direction="column"
                                 justify="center"
                                 alignItems="center"
-                                spacing={0}
                                 >
                                     <Grid
                                     item
@@ -134,7 +148,7 @@ export default class LoginPage extends Component {
                                     </Grid>
                                     <Grid
                                     item
-                                    xs
+                                    
                                     >
                                         <TextField
                                         id="pw"
@@ -149,25 +163,59 @@ export default class LoginPage extends Component {
                                         helperText="more than 8 alphanumeric"
                                         />
                                     </Grid>
-                                    <Grid
-                                    item
-                                    xs
-                                    >
-                                        <Button
-                                        variant="contained"
-                                        color="secondary"
-                                        onClick={this.handleLogin}
-                                        >
-                                            <Typography
-                                            align="center"
-                                            color="textPrimary"
-                                            >
-                                                Submit
-                                            </Typography>
-                                        </Button>
-                                    </Grid>
                                 </Grid>
                             </form>
+                            <Grid
+                            item
+                            >
+                                <Button
+                                variant="contained"
+                                color="secondary"
+                                onClick={this.handleLogin}
+                                type="submit"
+                                >
+                                    <Typography
+                                    align="center"
+                                    color="textPrimary"
+                                    >
+                                        Login
+                                    </Typography>
+                                </Button>
+                            </Grid>
+                            <Grid
+                            item
+                            container
+                            direction="row"
+                            justify="center"
+                            alignItems="center"
+                            spacing={1}
+                            >
+                                <Grid
+                                item
+                                >
+                                    <Typography
+                                    variant="caption"
+                                    color="textSecondary"
+                                    >
+                                        Don't have an account?
+                                    </Typography>
+                                </Grid>
+                                <Grid
+                                item
+                                >   
+                                    <Button
+                                    variant="text"
+                                    onClick={this.handleRegister}
+                                    >
+                                        <Typography
+                                        variant="caption"
+                                        color="secondary"
+                                        >
+                                            Sign Up
+                                        </Typography>
+                                    </Button>
+                                </Grid>
+                            </Grid>
                         </Grid>
                     </CardContent>
                 </Card>
