@@ -5,7 +5,8 @@
  */
 
 import React, { Component } from 'react';
-import { Grid, Paper, TextField, Divider, InputLabel, Typography } from '@material-ui/core';
+import { Grid, TextField, Typography, Button, Card, CardContent } from '@material-ui/core';
+import { Redirect } from 'react-router-dom';
 
 export default class LoginPage extends Component {
 
@@ -13,7 +14,8 @@ export default class LoginPage extends Component {
         super(props);
         this.state = {
             email: "",
-            pw: ""
+            pw: "",
+            successful: false
         }
 
         // TODO: Auto login
@@ -44,8 +46,41 @@ export default class LoginPage extends Component {
 
     }
 
+    /**
+     * Handle login button click and verification
+     */
+    handleLogin = () => {
+
+        // basic parameter validation (email, pw)
+        if (!this.state.email.match(/[a-z0-9A-Z]+@[a-z0-9A-Z]+.[a-z0-9A-Z]+/g)) {
+            alert('Email Incorrect');
+        }
+        if (this.state.pw.length < 8) {
+            alert('Password is too short');
+        }
+        //TODO: alphanumeric
+
+        // TODO: implement the authentication part
+
+        // redirection after successful authentication
+        this.setState({
+            successful: true
+        });
+    }
+
+
+
 
     render() {
+
+        if (this.state.successful) {
+            return <Redirect exact from="/" push to={{
+                pathname: "/home",
+                state: { email : this.state.email }
+            }}/>;
+        }
+
+
         return (
             <Grid
             container
@@ -53,56 +88,89 @@ export default class LoginPage extends Component {
             justify="center"
             alignItems="center"
             >
-                <Paper
-                elevation={3}>
-                    <Grid
-                    item
-                    container
-                    direction="column"
-                    justify="center"
-                    alignItems="center"
-                    spacing={1}
-                    >
-                        <Typography
-                        variant="h2"
-                        align="center"
-                        gutterBottom
+                <Card
+                raised
+                >
+                    <CardContent>
+                        <Grid
+                        item
+                        container
+                        direction="column"
+                        justify="center"
+                        alignItems="center"
+                        spacing={1}
                         >
-                        Darc
-                        </Typography>
-                        <form>
-                            <Grid
-                            item
-                            xs
+                            <Typography
+                            variant="h2"
+                            align="center"
+                            gutterBottom
                             >
-                                <TextField
-                                id="email"
-                                label="Email"
-                                type="email"
-                                value={this.state.email}
-                                onChange={this.handleChange}
-                                variant="outlined"
-                                required
-                                />
-                            </Grid>
-                            <Grid
-                            item
-                            xs
-                            >
-                                <TextField
-                                id="pw"
-                                label="Password"
-                                type="password"
-                                value={this.state.pw}
-                                onChange={this.handleChange}
-                                variant="outlined"
-                                required
-                                helperText="more than 8 alphanumeric"
-                                />
-                            </Grid>
-                        </form>
-                    </Grid>
-                </Paper>
+                            Darc
+                            </Typography>
+                            <form>
+                                <Grid
+                                item
+                                container
+                                direction="column"
+                                justify="center"
+                                alignItems="center"
+                                spacing={0}
+                                >
+                                    <Grid
+                                    item
+                                    xs
+                                    >
+                                        <TextField
+                                        id="email"
+                                        label="Email"
+                                        type="email"
+                                        color="primary"
+                                        margin="dense"
+                                        value={this.state.email}
+                                        onChange={this.handleChange}
+                                        variant="filled"
+                                        required
+                                        />
+                                    </Grid>
+                                    <Grid
+                                    item
+                                    xs
+                                    >
+                                        <TextField
+                                        id="pw"
+                                        label="Password"
+                                        type="password"
+                                        color="primary"
+                                        margin="dense"
+                                        value={this.state.pw}
+                                        onChange={this.handleChange}
+                                        variant="filled"
+                                        required
+                                        helperText="more than 8 alphanumeric"
+                                        />
+                                    </Grid>
+                                    <Grid
+                                    item
+                                    xs
+                                    >
+                                        <Button
+                                        variant="contained"
+                                        color="secondary"
+                                        onClick={this.handleLogin}
+                                        >
+                                            <Typography
+                                            align="center"
+                                            color="textPrimary"
+                                            >
+                                                Submit
+                                            </Typography>
+                                        </Button>
+                                    </Grid>
+                                </Grid>
+                            </form>
+                        </Grid>
+                    </CardContent>
+                </Card>
             </Grid>
         )
     }

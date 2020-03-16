@@ -4,8 +4,8 @@
  * 
  */
 
-import React, { Component } from 'react'
-import Axios from 'axios';
+import React, { Component } from 'react';
+import { Typography } from '@material-ui/core';
 
 export default class MainFeedPage extends Component {
 
@@ -27,7 +27,11 @@ export default class MainFeedPage extends Component {
     render() {
         return (
             <div>
-                
+                <Typography
+                variant="h1"
+                >
+                    Hi
+                </Typography>
             </div>
         )
     }
