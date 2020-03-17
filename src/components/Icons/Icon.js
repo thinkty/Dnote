@@ -6,7 +6,11 @@
  */
 
 import React, { Component } from 'react';
+import 'typeface-muli';
+import 'devicon';
 
+const nonexistant = ["json"]
+const originals = [""];
 
 export default class Icon extends Component {
 
@@ -14,44 +18,29 @@ export default class Icon extends Component {
         super(props);
         this.state = {
             name: props.name,
-            svg: ""
+            icon: "devicon-git-plain colored"
         };
     }
 
     componentDidMount() {
-
-        /*
         // take the plain svg first, and if not exist, take "-original.svg"
-        let path = "devicon/icons/" + this.state.name + "/" + this.state.name + "-plain.svg";
-        let request = new XMLHttpRequest();
-        request.open("GET", path, false);
+        let path = "devicon-" + this.state.name + "-plain colored";
+        if (originals.includes(this.state.name)) {
+            path = "devicon-" + this.state.name + "-original colored";
+        }
 
-
-        import(path)
-        .then((icon) => {
-            this.setState({
-                name: this.state.name,
-                svg: icon
-            });
-        })
-        // on error, import the original svg
-        .catch((error) => {
-            path = "devicon/icons/" + this.state.name + "/" + this.state.name + "-original.svg";
-            this.setState({
-                name: this.state.name,
-                svg: import(path)
-            });
+        // if the icon does not exist, just give a default icon
+        if (nonexistant.includes(this.state.name)) {
+            path = "devicon-javascript-plain colored";
+        }
+        this.setState({
+            icon: path
         });
-        */
     }
-
 
     render() {
         return (
-            <h1>Icon</h1>
-            // <svg viewBox="0 0 128 128">
-            //     {this.state.svg}
-            // </svg>
+            <h1 className={this.state.icon}>&#x20;</h1>
         )
     }
 }

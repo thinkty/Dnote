@@ -8,8 +8,8 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { ThemeProvider, createMuiTheme } from "@material-ui/core";
 import LoginPage from './components/LoginPage';
 import MainPage from './components/MainFeedPage';
-import AddEditPage from './components/AddEditPage/';
 import ProfilePage from './components/ProfilePage';
+import 'typeface-muli';
 
 
 const theme = createMuiTheme({
@@ -31,9 +31,7 @@ const theme = createMuiTheme({
         }
     },
     typography : {
-        h2 : {
-            font : "Inter"
-        },
+        fontFamily : 'Muli',
         button : {
             textTransform : "capitalize"
         }
@@ -50,7 +48,6 @@ export default function App() {
                     <Route exact path="/home" component={MainPage} />
                     <Route exact path="/signup" component={MainPage} />
                     <Route exact path="/home/profile" component={ProfilePage} />
-                    <Route exact path="/home/add" component={AddEditPage} />
                 </Switch>
             </Router>
         </ThemeProvider>

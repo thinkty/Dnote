@@ -31,7 +31,7 @@ export default class MainFeedPage extends Component {
         let notes = [];
         let mockdata = require('../../mock.json');
         mockdata.forEach(note => {
-            notes.push(<Note key={note.id} data={note}/>)
+            notes.push(<Grid item xs><Note key={note.id} data={note}/></Grid>)
         });
         this.setState({
             notes: notes
@@ -40,35 +40,23 @@ export default class MainFeedPage extends Component {
     
     render() {
         return (
-            <Grid
-            container
-            direction="column"
-            justify="center"
-            alignItems="center"
-            >
+            <div>
                 <AppBar
                 color="transparent"
                 >
                     <Topbar/>
                 </AppBar>
+                <br/><br/><br/><br/><br/>
                 <Grid
-                item
-                xs
-                >
-                    <br/><br/><br/><br/>
-                </Grid>
-                <Grid
-                item
-                xs
                 container
                 direction="column"
                 justify="center"
                 alignItems="center"
-                spacing={2}
+                spacing={5}
                 >
                     {this.state.notes}
                 </Grid>
-            </Grid>
+            </div>
         )
     }
 }
