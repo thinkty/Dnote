@@ -21,6 +21,13 @@ export default class MainFeedPage extends Component {
     }
 
     /**
+     * Helper function to remove the child component (note)
+     */
+    detonate = (key) => {
+        let notes = this.state.notes;
+    }
+
+    /**
      * Make a request to the server for notes of the current user
      */
     componentDidMount() {
@@ -31,7 +38,14 @@ export default class MainFeedPage extends Component {
         let notes = [];
         let mockdata = require('../../mock.json');
         mockdata.forEach(note => {
-            notes.push(<Grid item xs><Note key={note.id} data={note}/></Grid>)
+            notes.push(
+                <Grid 
+                item 
+                xs={12}
+                style={{width: "80%", minWidth: "360px", maxWidth: "800px"}}
+                >
+                    <Note key={note.id} data={note} detonate={this.detonate}/>
+                </Grid>)
         });
         this.setState({
             notes: notes
@@ -52,7 +66,7 @@ export default class MainFeedPage extends Component {
                 direction="column"
                 justify="center"
                 alignItems="center"
-                spacing={5}
+                spacing={1}
                 >
                     {this.state.notes}
                 </Grid>
