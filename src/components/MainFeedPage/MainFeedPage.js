@@ -14,17 +14,37 @@ export default class MainFeedPage extends Component {
     constructor(props) {
         super(props);
 
-        // notes will be an array of note components
+        // notes    = array of note components
+        // notesMap = array of keys for notes for accessing the note easibly
         this.state = {
-            notes: []
+            notes: [],
+            notesMap: []
         }
     }
 
     /**
      * Helper function to remove the child component (note)
+     * TODO: replace time with _id
      */
-    detonate = (key) => {
+    detonate = (time) => {
         let notes = this.state.notes;
+        let notesMap = this.state.notesMap;
+
+        // find the note with the correct key
+        for (let i = 0; i < notesMap.length; i++) {
+            if (notesMap[i] === time.toString()) {
+                // remove the current index from both map and array
+                notesMap.splice(i, 1);
+                notes.splice(i, 1);
+                break;
+            }
+        }
+
+        // update the state
+        this.setState({
+            notes: notes,
+            notesMap: notesMap
+        });
     }
 
     /**
@@ -36,19 +56,18 @@ export default class MainFeedPage extends Component {
 
         // TODO: remove mock data
         let notes = [];
+        let notesMap = [];
         let mockdata = require('../../mock.json');
         mockdata.forEach(note => {
+            // TODO: Replace time with _id
             notes.push(
-                <Grid 
-                item 
-                xs={12}
-                style={{width: "80%", minWidth: "360px", maxWidth: "800px"}}
-                >
-                    <Note key={note.id} data={note} detonate={this.detonate}/>
-                </Grid>)
+                <Note key={note.time.toString()}  data={note} detonate={this.detonate}/>
+            )
+            notesMap.push(note.time.toString());
         });
         this.setState({
-            notes: notes
+            notes: notes,
+            notesMap: notesMap
         });
     }
     

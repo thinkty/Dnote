@@ -85,7 +85,8 @@ export default class Post extends Component {
         // TODO: Make call to the server
 
         // destroy self
-        this.state.detonate();
+        this.state.detonate(this.state.time);
+        this.toggleSubmenu();
     }
 
     /**
@@ -164,7 +165,11 @@ export default class Post extends Component {
 
     render() {
         return (
-            <div>
+            <Grid
+            item 
+            xs={12}
+            style={{width: "80%", minWidth: "360px", maxWidth: "800px"}}
+            >
                 <Card>
                     <CardHeader 
                     avatar={
@@ -314,7 +319,7 @@ export default class Post extends Component {
                         </Button>
                     </DialogActions>
                 </Dialog>
-            </div>
+            </Grid>
         );
     }
 }

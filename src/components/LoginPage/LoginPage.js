@@ -50,7 +50,9 @@ export default class LoginPage extends Component {
     /**
      * Handle login button click and verification
      */
-    handleLogin = () => {
+    handleLogin = (event) => {
+        // prevent defualt behavior of form submit
+        event.preventDefault();
 
         // basic parameter validation (email, pw)
         if (!this.state.email.match(/[a-z0-9A-Z]+@[a-z0-9A-Z]+.[a-z0-9A-Z]+/g)) {
@@ -130,7 +132,9 @@ export default class LoginPage extends Component {
                             >
                             Darc
                             </Typography>
-                            <form>
+                            <form
+                            onSubmit={this.handleLogin}
+                            >
                                 <Grid
                                 item
                                 container
@@ -144,7 +148,7 @@ export default class LoginPage extends Component {
                                     >
                                         <TextField
                                         id="email"
-                                        label="Email"
+                                        label="Email Address"
                                         type="email"
                                         color="primary"
                                         margin="dense"
