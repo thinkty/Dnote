@@ -8,6 +8,7 @@ Darc is a web application for archiving your notes and references related to deb
   - Create / remove / edit notes
   - Search / filter notes
   - Export notes
+  - Encrypt everything
 
 # New Feature Plans
 
