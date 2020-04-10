@@ -14,7 +14,10 @@ Darc is a web application for archiving your notes and references related to deb
 
   - Share your notes in read-only mode using a unique URL
   - Search not only for notes, but also on [Stackoverflow]
+    - When the post that you have searched through Darc on [Stackoverflow] is interesting, 
+      you can mark it as good and quickly make a Darc note about it
   - Make the web application a Progressive Web Application
+  - Link to [Github] to indicate which repo the note is related to
 
 ### Tech
 
@@ -50,3 +53,4 @@ This README was written with reference to the template in [Dillinger] : an onlin
    [Mongoose]: <https://mongoosejs.com/>
    [MongoDB]: <https://www.mongodb.com/>
    [Dillinger]: <https://dillinger.io/>
+   [Github]: <https://github.com/>
