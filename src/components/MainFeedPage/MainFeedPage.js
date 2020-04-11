@@ -25,6 +25,8 @@ export default class MainFeedPage extends Component {
     /**
      * Helper function to remove the child component (note)
      * TODO: replace time with _id
+     * 
+     * @param  time  currently, we are distinguishing note by time (TODO: use _id)
      */
     detonate = (time) => {
         let notes = this.state.notes;
@@ -61,13 +63,56 @@ export default class MainFeedPage extends Component {
         mockdata.forEach(note => {
             // TODO: Replace time with _id
             notes.push(
-                <Note key={note.time.toString()}  data={note} detonate={this.detonate}/>
+                <Note key={note.time.toString()} data={note} detonate={this.detonate}/>
             )
             notesMap.push(note.time.toString());
         });
         this.setState({
             notes: notes,
             notesMap: notesMap
+        });
+    }
+
+    /**
+     * This is a helper function that will be passed on to Topbar
+     * Topbar will call this function to add the notes visually
+     * and also to the server
+     * 
+     * @param  title     title of the new note
+     * @param  content   content of new note
+     * @param  lantool   lantool related to new note
+     * @param  reference reference related to new note
+     */
+    createNewNote = async (title, content, lantool, reference) => {
+
+        // TODO: Send request to the server to add new note
+        // TODO: do it synchronously
+
+        // fetch the _id of the new note
+        let _id = 69;
+
+        // graphically update the notes
+        // put the _id also as it is needed for modifying the ntoe
+        let noteData = {
+            id : _id,
+            title : title,
+            content : content,
+            lantool : lantool,
+            time : new Date().getTime(),
+            reference : reference
+        };
+        
+        // add the new note to the state
+        let notes = this.state.notes;
+        notes.push(<Note key={noteData.time.toString()} data={noteData} detonate={this.detonate}/>);
+        // add the key also to the map
+        let map = this.state.notesMap;
+        map.push(noteData.time.toString()); // TODO: replace to id
+
+        // setState to rerender
+        this.setState({
+            notes: notes,
+            notesMap: map
         });
     }
     
@@ -77,12 +122,12 @@ export default class MainFeedPage extends Component {
                 <AppBar
                 color="transparent"
                 >
-                    <Topbar/>
+                    <Topbar createNewNote={this.createNewNote}/>
                 </AppBar>
                 <br/><br/><br/><br/><br/>
                 <Grid
                 container
-                direction="column"
+                direction="column-reverse"
                 justify="center"
                 alignItems="center"
                 spacing={1}
