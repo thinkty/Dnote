@@ -36,7 +36,7 @@ Currently, Darc does not need any installation. However, I plan to make it into 
 License
 ----
 
-MIT
+GNU General Public License v3.0
 
 Reference
 ----
