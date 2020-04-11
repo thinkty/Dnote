@@ -11,24 +11,31 @@ import React, { Component } from "react";
 import {
   Grid,
   Card,
-  IconButton,
   TextField,
-  Tooltip,
   Dialog,
   DialogTitle,
   Typography,
   DialogContent,
   DialogActions,
   Button,
+  Backdrop,
 } from "@material-ui/core";
-import { Autocomplete } from "@material-ui/lab";
+import AppsIcon from "@material-ui/icons/Apps";
+import CreateIcon from '@material-ui/icons/Create';
+import PersonIcon from '@material-ui/icons/Person';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import { Autocomplete, SpeedDial, SpeedDialAction } from "@material-ui/lab";
+import { Redirect } from "react-router-dom";
 const iconList = require("../Icons/list.json");
+
 
 export default class Topbar extends Component {
   constructor(props) {
     super(props);
     this.state = {
       createNoteCallback: props.createNewNote,
+      toggleMenu: false,
+      toProfilePage: false,
       search: false,
       searchValue: "",
       onAddNew: false,
@@ -36,8 +43,27 @@ export default class Topbar extends Component {
       content: "",
       lantool: "",
       reference: "",
+      actions: [
+        {
+          icon: <CreateIcon color="secondary" />,
+          name: "Create New Note",
+          onClick: this.toggleAddNewNote
+        },
+        { 
+          icon: <PersonIcon color="secondary" />,
+          name: "Manage Account",
+          onClick: this.toProfilePage
+        },
+        { 
+          icon: <ExitToAppIcon color="secondary" />,
+          name: "Logout",
+          onClick: this.handleLogout
+        },
+      ],
     };
   }
+
+
 
   /**
    * Handler for searching functionality
@@ -45,6 +71,14 @@ export default class Topbar extends Component {
   onSearch = () => {
     alert("yeet");
   };
+
+  /**
+   * Handler for logging out from the application
+   */
+  handleLogout = () => {
+    // TODO: handle logout
+    console.log("Logging out!");
+  }
 
   /**
    * Handler for updating the search value (controlled component)
@@ -129,7 +163,36 @@ export default class Topbar extends Component {
     this.toggleAddNewNote();
   };
 
+  /**
+   * Helper function for opening and closing the speed dial menu
+  */
+  openMenu = () => {
+    this.setState({
+      toggleMenu: true
+    });
+  }
+  closeMenu = () => {
+    this.setState({
+      toggleMenu: false
+    });
+  }
+
+  /**
+   * Handler for redirecting the user to the profile management page
+   */
+  toProfilePage = () => {
+    this.setState({
+      toProfilePage: true
+    });
+  }
+
   render() {
+
+    // redirection to the profile page
+    if (this.state.toProfilePage) {
+      return <Redirect from="/home" push to="/home/profile" />
+    }
+
     return (
       <Card raised>
         <Grid
@@ -139,28 +202,6 @@ export default class Topbar extends Component {
           alignItems="center"
           spacing={1}
         >
-          <Grid item>
-            <Tooltip title="Settings" placement="left" arrow enterDelay={500}>
-              <IconButton href="/home/profile">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 120 120"
-                  width="32px"
-                  height="32px"
-                >
-                  <circle cx="20" cy="20" r="10" fill="#fff" />
-                  <circle cx="60" cy="20" r="10" fill="#fff" />
-                  <circle cx="100" cy="20" r="10" fill="#fff" />
-                  <circle cx="20" cy="60" r="10" fill="#fff" />
-                  <circle cx="60" cy="60" r="10" fill="#fff" />
-                  <circle cx="100" cy="60" r="10" fill="#fff" />
-                  <circle cx="20" cy="100" r="10" fill="#fff" />
-                  <circle cx="60" cy="100" r="10" fill="#fff" />
-                  <circle cx="100" cy="100" r="10" fill="#fff" />
-                </svg>
-              </IconButton>
-            </Tooltip>
-          </Grid>
           <Grid item>
             <form onSubmit={this.onSearch}>
               <TextField
@@ -172,45 +213,27 @@ export default class Topbar extends Component {
             </form>
           </Grid>
           <Grid item>
-            <Tooltip
-              title="Add New Note"
-              placement="right"
-              arrow
-              enterDelay={500}
+            <Backdrop open={this.state.toggleMenu}/>
+            <SpeedDial
+              ariaLabel="Application menu"
+              FabProps={{color: "secondary"}}
+              icon={<AppsIcon fontSize="large" style={{color: "#ffffff"}}/>}
+              direction="right"
+              onClose={this.closeMenu}
+              onOpen={this.openMenu}
+              open={this.state.toggleMenu}
             >
-              <IconButton onClick={this.toggleAddNewNote}>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 120 120"
-                  width="40px"
-                  height="40px"
-                >
-                  <circle
-                    cx="60"
-                    cy="60"
-                    r="55"
-                    fill="#6698FA"
-                    fillOpacity="100"
+              {
+                this.state.actions.map((action) => (
+                  <SpeedDialAction 
+                    key={action.name}
+                    icon={action.icon}
+                    tooltipTitle={action.name}
+                    onClick={action.onClick}
                   />
-                  <line
-                    x1="40"
-                    y1="60"
-                    x2="80"
-                    y2="60"
-                    stroke="#fff"
-                    strokeWidth="10"
-                  />
-                  <line
-                    x1="60"
-                    y1="40"
-                    x2="60"
-                    y2="80"
-                    stroke="#fff"
-                    strokeWidth="10"
-                  />
-                </svg>
-              </IconButton>
-            </Tooltip>
+                ))
+              }
+            </SpeedDial>
           </Grid>
         </Grid>
         <Dialog open={this.state.onAddNew} onClose={this.toggleAddNewNote}>

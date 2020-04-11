@@ -13,6 +13,8 @@ export default class MainFeedPage extends Component {
   constructor(props) {
     super(props);
 
+    // TODO: https://material-ui.com/components/skeleton/ use skeleton as placeholders before getting notes from the server
+
     // notes    = array of note components
     // notesMap = array of keys for notes for accessing the note easibly
     this.state = {
