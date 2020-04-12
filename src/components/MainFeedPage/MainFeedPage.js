@@ -19,13 +19,20 @@ import {
   TextField,
   Snackbar,
 } from "@material-ui/core";
-import { Autocomplete, SpeedDial, SpeedDialAction, Alert } from "@material-ui/lab";
+import {
+  Autocomplete,
+  SpeedDial,
+  SpeedDialAction,
+  Alert,
+  SpeedDialIcon,
+} from "@material-ui/lab";
 import { Redirect } from "react-router-dom";
 import AppsIcon from "@material-ui/icons/Apps";
 import CreateIcon from "@material-ui/icons/Create";
 import PersonIcon from "@material-ui/icons/Person";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import SearchIcon from "@material-ui/icons/Search";
+import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
 import Note from "../Note";
 import Topbar from "../Topbar";
 const iconList = require("../Icons/list.json");
@@ -44,7 +51,7 @@ export default class MainFeedPage extends Component {
       alert: false,
       alertType: "",
       alertMessage: "",
-      toggleMenu: false,
+      toggleMenu: true,
       isSearchEnabled: false,
       enableTopbar: false,
       toProfilePage: false,
@@ -234,7 +241,12 @@ export default class MainFeedPage extends Component {
     }
 
     // call the function for adding note graphically and also in the server
-    this.createNewNote(this.state.title, this.state.content, this.state.lantool, this.state.reference);
+    this.createNewNote(
+      this.state.title,
+      this.state.content,
+      this.state.lantool,
+      this.state.reference
+    );
 
     // close the dialog
     this.toggleAddNewNote();
@@ -268,18 +280,17 @@ export default class MainFeedPage extends Component {
    * Handle to enable the Search UI component
    */
   enableSearch = () => {
-
     // toggle search component
     if (this.state.isSearchEnabled) {
       this.setState({
-        isSearchEnabled: false
+        isSearchEnabled: false,
       });
     } else {
       this.setState({
-        isSearchEnabled: true
+        isSearchEnabled: true,
       });
     }
-  }
+  };
 
   /**
    * Handler for redirecting the user to the profile management page
@@ -306,7 +317,7 @@ export default class MainFeedPage extends Component {
 
   /**
    * Helper function to show the user a custom alert with the desired message
-   * 
+   *
    * @param  message  the message to show the user
    * @param  type     alert severity
    */
@@ -314,9 +325,9 @@ export default class MainFeedPage extends Component {
     this.setState({
       alert: true,
       alertMessage: message,
-      alertType: type
+      alertType: type,
     });
-  }
+  };
   /**
    * Helper function to close the custom alert
    */
@@ -324,7 +335,7 @@ export default class MainFeedPage extends Component {
     this.setState({
       alert: false,
     });
-  }
+  };
 
   render() {
     // redirection to the profile page
@@ -334,7 +345,7 @@ export default class MainFeedPage extends Component {
 
     return (
       <div>
-        <Snackbar 
+        <Snackbar
           open={this.state.alert}
           autoHideDuration={3000}
           onClose={this.dismissAlert}
@@ -362,29 +373,34 @@ export default class MainFeedPage extends Component {
           variant="elevation"
           elevation={0}
           style={{
-            top: "10%",
-            left: "40%",
+            left: "45%",
+            top: "55%",
           }}
         >
           <SpeedDial
             ariaLabel="Application menu"
-            FabProps={{ color: "secondary" }}
-            icon={<AppsIcon style={{ color: "#ffffff" }} />}
-            direction="down"
-            onClose={this.closeMenu}
-            onOpen={this.openMenu}
+            FabProps={{ color: "secondary", size: "large" }}
+            icon={
+              <SpeedDialIcon
+                icon={<AppsIcon style={{ color: "#fff" }} />}
+                openIcon={<KeyboardArrowUpIcon style={{ color: "#fff" }} />}
+              />
+            }
+            direction="up"
+            onClick={() => {
+              this.state.toggleMenu ? this.closeMenu() : this.openMenu();
+            }}
             open={this.state.toggleMenu}
           >
             {this.state.actions.map((action) => {
-              
               // Using span to change the background color of the icon
               // since mui's SpeedDialogAction does not have a color prop
               let icon = (
-                <span 
+                <span
                   style={{
                     borderRadius: 100,
                     backgroundColor: "#fff",
-                    padding: 8
+                    padding: 8,
                   }}
                 >
                   {action.icon}
