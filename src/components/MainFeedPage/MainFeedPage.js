@@ -5,9 +5,30 @@
  */
 
 import React, { Component } from "react";
-import Topbar from "../Topbar";
-import { AppBar, Grid } from "@material-ui/core";
+import {
+  AppBar,
+  Grid,
+  Toolbar,
+  Fade,
+  Dialog,
+  DialogTitle,
+  Typography,
+  DialogContent,
+  DialogActions,
+  Button,
+  TextField,
+  Snackbar,
+} from "@material-ui/core";
+import { Autocomplete, SpeedDial, SpeedDialAction, Alert } from "@material-ui/lab";
+import { Redirect } from "react-router-dom";
+import AppsIcon from "@material-ui/icons/Apps";
+import CreateIcon from "@material-ui/icons/Create";
+import PersonIcon from "@material-ui/icons/Person";
+import ExitToAppIcon from "@material-ui/icons/ExitToApp";
+import SearchIcon from "@material-ui/icons/Search";
 import Note from "../Note";
+import Topbar from "../Topbar";
+const iconList = require("../Icons/list.json");
 
 export default class MainFeedPage extends Component {
   constructor(props) {
@@ -20,6 +41,40 @@ export default class MainFeedPage extends Component {
     this.state = {
       notes: [],
       notesMap: [],
+      alert: false,
+      alertType: "",
+      alertMessage: "",
+      toggleMenu: false,
+      isSearchEnabled: false,
+      enableTopbar: false,
+      toProfilePage: false,
+      onAddNew: false,
+      title: "",
+      content: "",
+      lantool: "",
+      reference: "",
+      actions: [
+        {
+          icon: <SearchIcon color="secondary" />,
+          name: "Search",
+          onClick: this.enableSearch,
+        },
+        {
+          icon: <CreateIcon color="secondary" />,
+          name: "Create",
+          onClick: this.toggleAddNewNote,
+        },
+        {
+          icon: <PersonIcon color="secondary" />,
+          name: "Profile",
+          onClick: this.toProfilePage,
+        },
+        {
+          icon: <ExitToAppIcon color="secondary" />,
+          name: "Logout",
+          onClick: this.handleLogout,
+        },
+      ],
     };
   }
 
@@ -84,7 +139,6 @@ export default class MainFeedPage extends Component {
    * @param  reference reference related to new note
    */
   createNewNote = async (title, content, lantool, reference) => {
-
     let noteData = {
       title: title,
       content: content,
@@ -104,7 +158,7 @@ export default class MainFeedPage extends Component {
 
     // add the new note to the state
     let notes = this.state.notes;
-    notes.push(
+    notes.unshift(
       <Note
         key={noteData.time.toString()}
         data={noteData}
@@ -113,7 +167,7 @@ export default class MainFeedPage extends Component {
     );
     // add the key also to the map
     let map = this.state.notesMap;
-    map.push(noteData.time.toString()); // TODO: replace to id
+    map.unshift(noteData.time.toString()); // TODO: replace to id
 
     // setState to rerender
     this.setState({
@@ -122,22 +176,321 @@ export default class MainFeedPage extends Component {
     });
   };
 
+  /**
+   * Handler for logging out from the application
+   */
+  handleLogout = () => {
+    // TODO: handle logout
+    console.log("Logging out!");
+  };
+
+  /**
+   * Handler for adding a new note
+   */
+  toggleAddNewNote = () => {
+    this.setState({
+      onAddNew: !this.state.onAddNew,
+    });
+  };
+
+  /**
+   * Handler for changes on new note creation
+   *
+   * @param  event
+   */
+  onNewNoteChange = (event) => {
+    this.setState({
+      [event.target.id]: event.target.value,
+    });
+  };
+
+  /**
+   * Special case for handling lantool change
+   *
+   * @param  value  modified value for lantool
+   */
+  onLantoolChange = (value) => {
+    this.setState({
+      lantool: value,
+    });
+  };
+
+  /**
+   * Handler for submitting (creating) the new note
+   */
+  onSubmit = () => {
+    // Make sure none of the details are empty
+    if (this.state.title === "") {
+      this.alertWithText("Title cannot be empty", "error");
+      return;
+    }
+    if (this.state.content === "") {
+      this.alertWithText("Content cannot be empty", "error");
+      return;
+    }
+    if (this.state.lantool === "") {
+      this.alertWithText("Please choose a language or tool", "error");
+      return;
+    }
+
+    // call the function for adding note graphically and also in the server
+    this.createNewNote(this.state.title, this.state.content, this.state.lantool, this.state.reference);
+
+    // close the dialog
+    this.toggleAddNewNote();
+    // empty the title, content, lantool, reference for next time
+    this.setState({
+      title: "",
+      content: "",
+      lantool: "",
+      reference: "",
+    });
+    // close the dial menu
+    this.closeMenu();
+  };
+
+  /**
+   * Handler for cancelling the creation of the new note
+   */
+  onCancel = () => {
+    // reset the values
+    this.setState({
+      title: "",
+      content: "",
+      lantool: "",
+      reference: "",
+    });
+    // close the dialog
+    this.toggleAddNewNote();
+  };
+
+  /**
+   * Handle to enable the Search UI component
+   */
+  enableSearch = () => {
+
+    // toggle search component
+    if (this.state.isSearchEnabled) {
+      this.setState({
+        isSearchEnabled: false
+      });
+    } else {
+      this.setState({
+        isSearchEnabled: true
+      });
+    }
+  }
+
+  /**
+   * Handler for redirecting the user to the profile management page
+   */
+  toProfilePage = () => {
+    this.setState({
+      toProfilePage: true,
+    });
+  };
+
+  /**
+   * Helper function for opening and closing the speed dial menu
+   */
+  openMenu = () => {
+    this.setState({
+      toggleMenu: true,
+    });
+  };
+  closeMenu = () => {
+    this.setState({
+      toggleMenu: false,
+    });
+  };
+
+  /**
+   * Helper function to show the user a custom alert with the desired message
+   * 
+   * @param  message  the message to show the user
+   * @param  type     alert severity
+   */
+  alertWithText = (message, type) => {
+    this.setState({
+      alert: true,
+      alertMessage: message,
+      alertType: type
+    });
+  }
+  /**
+   * Helper function to close the custom alert
+   */
+  dismissAlert = () => {
+    this.setState({
+      alert: false,
+    });
+  }
+
   render() {
+    // redirection to the profile page
+    if (this.state.toProfilePage) {
+      return <Redirect from="/home" push to="/home/profile" />;
+    }
+
     return (
       <div>
-        <AppBar color="transparent">
-          <Topbar createNewNote={this.createNewNote} />
+        <Snackbar 
+          open={this.state.alert}
+          autoHideDuration={3000}
+          onClose={this.dismissAlert}
+          onClick={this.dismissAlert}
+        >
+          <Alert
+            severity={this.state.alertType}
+            onClose={this.dismissAlert}
+            variant="filled"
+          >
+            {this.state.alertMessage}
+          </Alert>
+        </Snackbar>
+        {/* <Fade in={this.state.isSearchEnabled}>
+          <AppBar position="fixed" color="transparent">
+            <Toolbar>
+              <Topbar createNewNote={this.createNewNote} />
+            </Toolbar>
+          </AppBar>
+          <Toolbar/>
+        </Fade> */}
+        <AppBar
+          position="fixed"
+          color="transparent"
+          variant="elevation"
+          elevation={0}
+          style={{
+            top: "10%",
+            left: "40%",
+          }}
+        >
+          <SpeedDial
+            ariaLabel="Application menu"
+            FabProps={{ color: "secondary" }}
+            icon={<AppsIcon style={{ color: "#ffffff" }} />}
+            direction="down"
+            onClose={this.closeMenu}
+            onOpen={this.openMenu}
+            open={this.state.toggleMenu}
+          >
+            {this.state.actions.map((action) => {
+              
+              // Using span to change the background color of the icon
+              // since mui's SpeedDialogAction does not have a color prop
+              let icon = (
+                <span 
+                  style={{
+                    borderRadius: 100,
+                    backgroundColor: "#fff",
+                    padding: 8
+                  }}
+                >
+                  {action.icon}
+                </span>
+              );
+
+              return (
+                <SpeedDialAction
+                  key={action.name}
+                  icon={icon}
+                  tooltipTitle={action.name}
+                  onClick={action.onClick}
+                />
+              );
+            })}
+          </SpeedDial>
         </AppBar>
+
         <Grid
+          item
           container
-          direction="column-reverse"
+          direction="column"
           justify="center"
           alignItems="center"
           spacing={1}
-          style={{marginTop: "5em"}}
         >
           {this.state.notes}
         </Grid>
+
+        <Dialog open={this.state.onAddNew} onClose={this.toggleAddNewNote}>
+          <DialogTitle>
+            <Typography>New Note</Typography>
+          </DialogTitle>
+          <DialogContent dividers>
+            <TextField
+              autoFocus
+              id="title"
+              required
+              color="secondary"
+              margin="normal"
+              label="Title"
+              type="text"
+              fullWidth
+              onChange={this.onNewNoteChange}
+              value={this.state.title}
+            />
+            <TextField
+              id="content"
+              required
+              variant="outlined"
+              color="secondary"
+              margin="normal"
+              label="Content"
+              type="text"
+              fullWidth
+              multiline
+              rows="3"
+              rowsMax="10"
+              onChange={this.onNewNoteChange}
+              value={this.state.content}
+            />
+            <Autocomplete
+              id="lantool"
+              autoHighlight
+              options={iconList}
+              getOptionLabel={(option) => option.title}
+              onChange={(event, newValue) => {
+                if (newValue == null) {
+                  this.onLantoolChange("");
+                  return;
+                }
+                this.onLantoolChange(newValue.title);
+              }}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  required
+                  label="Language or Tool"
+                  color="secondary"
+                />
+              )}
+            />
+            <TextField
+              id="reference"
+              color="secondary"
+              margin="normal"
+              label="Reference"
+              type="text"
+              fullWidth
+              onChange={this.onNewNoteChange}
+              value={this.state.reference}
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button variant="outlined" onClick={this.onCancel} color="inherit">
+              Cancel
+            </Button>
+            <Button
+              variant="contained"
+              onClick={this.onSubmit}
+              color="secondary"
+            >
+              Create
+            </Button>
+          </DialogActions>
+        </Dialog>
       </div>
     );
   }
