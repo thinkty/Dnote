@@ -56,28 +56,23 @@ export default class Topbar extends Component {
   render() {
 
     return (
-      <Card raised>
-        <Grid
-          container
-          direction="row"
-          justify="center"
-          alignItems="center"
-          spacing={1}
-        >
-          <Grid item>
-            <Fade in={this.state.isSearchEnabled}>
-              <form onSubmit={this.onSearch}>
-                <TextField
-                  color="secondary"
-                  placeholder="Search..."
-                  onChange={this.onSearchChange}
-                  type="input"
-                />
-              </form>
-            </Fade>
-          </Grid>
+      <Grid
+        container
+        direction="column"
+        justify="center"
+        alignItems="center"
+      >
+        <Grid item>
+          <form onSubmit={this.onSearch}>
+            <TextField
+              color="secondary"
+              placeholder="Search..."
+              onChange={this.onSearchChange}
+              type="input"
+            />
+          </form>
         </Grid>
-      </Card>
+      </Grid>
     );
   }
 }

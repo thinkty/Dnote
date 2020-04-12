@@ -281,15 +281,11 @@ export default class MainFeedPage extends Component {
    */
   enableSearch = () => {
     // toggle search component
-    if (this.state.isSearchEnabled) {
-      this.setState({
-        isSearchEnabled: false,
-      });
-    } else {
-      this.setState({
-        isSearchEnabled: true,
-      });
-    }
+    this.setState({
+      isSearchEnabled: !this.state.isSearchEnabled
+    });
+    
+    console.log(this.state.isSearchEnabled)
   };
 
   /**
@@ -359,14 +355,21 @@ export default class MainFeedPage extends Component {
             {this.state.alertMessage}
           </Alert>
         </Snackbar>
-        {/* <Fade in={this.state.isSearchEnabled}>
-          <AppBar position="fixed" color="transparent">
+        <Fade in={this.state.isSearchEnabled}>
+          <div>
+          <AppBar 
+            position="fixed"
+            color="transparent"
+            variant="elevation"
+            elevation={0}
+          >
             <Toolbar>
               <Topbar createNewNote={this.createNewNote} />
             </Toolbar>
           </AppBar>
           <Toolbar/>
-        </Fade> */}
+          </div>
+        </Fade>
         <AppBar
           position="fixed"
           color="transparent"
