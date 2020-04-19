@@ -80,8 +80,7 @@ export default class LoginPage extends Component {
     }
 
     // authenticate
-    // TODO: Change request url /////////////////////////////////////////////////////////////////////////////////////////////////
-    axios.post("http://localhost:3001/api-user/auth", {
+    axios.post("https://darc-backend.herokuapp.com/api-user/auth", {
       email: this.state.email,
       password: this.state.pw
     })

@@ -77,8 +77,7 @@ export default class RegisterPage extends Component {
     }
 
     // send to server
-    // TODO: Change request url /////////////////////////////////////////////////////////////////////////////////////////////////
-    axios.post("http://localhost:3001/api-user/register", {
+    axios.post("https://darc-backend.herokuapp.com/api-user/register", {
       email: this.state.email,
       password: this.state.pw
     })
