@@ -1,6 +1,6 @@
 /**
- * This is the login page.
- * The user will enter his/her email and password for login
+ * This is the register page.
+ * The user will enter his/her email and password for registering a new account
  *
  */
 
@@ -12,24 +12,24 @@ import {
   Button,
   Card,
   CardContent,
-  Snackbar
+  Snackbar,
 } from "@material-ui/core";
 import { Redirect } from "react-router-dom";
 import { Alert } from "@material-ui/lab";
+import axios from "axios";
 
-export default class LoginPage extends Component {
+export default class RegisterPage extends Component {
+
   constructor(props) {
     super(props);
     this.state = {
       email: "",
       pw: "",
       successful: false,
-      signup: false,
+      signin: false,
       notify: false,
-      notification: ""
+      notification: "",
     };
-
-    // TODO: Auto login
   }
 
   /**
@@ -47,15 +47,13 @@ export default class LoginPage extends Component {
         email: this.state.email,
         pw: event.target.value,
       });
-    } else {
-      this.alert("Error");
     }
   };
 
   /**
    * Handle login button click and verification
    */
-  handleLogin = (event) => {
+  handleRegister = (event) => {
     // prevent defualt behavior of form submit
     event.preventDefault();
 
@@ -78,21 +76,21 @@ export default class LoginPage extends Component {
       return;
     }
 
-    //TODO: implement the authentication part
-
-    // redirection after successful authentication
-    this.setState({
-      successful: true,
-    });
-  };
-
-  /**
-   * Handle register link clicked
-   */
-  handleRegister = () => {
-    // redirection
-    this.setState({
-      signup: true,
+    // send to server
+    axios.post("http://localhost:3001/api-user/register", {
+      email: this.state.email,
+      password: this.state.pw
+    })
+    .then((response) => {
+      setTimeout(() => {
+        // redirection after successful authentication
+        this.setState({
+          successful: true,
+        });
+      }, 1000);
+    })
+    .catch((error) => {
+      this.alert("Error while registering, please try again later");
     });
   };
 
@@ -113,14 +111,22 @@ export default class LoginPage extends Component {
     });
   }
 
-  // TODO: use https://material-ui.com/components/transitions/
+  /**
+   * Handle login link clicked
+   */
+  handleLogin = () => {
+    // redirection
+    this.setState({
+      signin: true,
+    });
+  };
 
   render() {
     if (this.state.successful) {
       return (
         <Redirect
           exact
-          from="/"
+          from="/register"
           push
           to={{
             pathname: "/home",
@@ -130,12 +136,17 @@ export default class LoginPage extends Component {
       );
     }
 
-    if (this.state.signup) {
-      return <Redirect exact from="/" push to="/register" />;
+    if (this.state.signin) {
+      return <Redirect exact from="/register" push to="/" />;
     }
 
     return (
-      <Grid container direction="column" justify="center" alignItems="center">
+      <Grid 
+        container 
+        direction="column" 
+        justify="center" 
+        alignItems="center"
+      >
         <Snackbar
           open={this.state.notify}
           autoHideDuration={3000}
@@ -159,7 +170,11 @@ export default class LoginPage extends Component {
               alignItems="center"
               spacing={2}
             >
-              <Typography variant="h2" align="center" gutterBottom>
+              <Typography 
+                variant="h2" 
+                align="center" 
+                gutterBottom
+              >
                 Darc
               </Typography>
 
@@ -171,7 +186,7 @@ export default class LoginPage extends Component {
                 alignItems="center"
               >
                 <Grid item xs>
-                  <form onSubmit={this.handleLogin}>
+                  <form onSubmit={this.handleRegister}>
                     <TextField
                       id="email"
                       label="Email"
@@ -186,7 +201,7 @@ export default class LoginPage extends Component {
                   </form>
                 </Grid>
                 <Grid item>
-                  <form onSubmit={this.handleLogin}>
+                  <form onSubmit={this.handleRegister}>
                     <TextField
                       id="pw"
                       label="Password"
@@ -205,11 +220,11 @@ export default class LoginPage extends Component {
                 <Button
                   variant="contained"
                   color="secondary"
-                  onClick={this.handleLogin}
+                  onClick={this.handleRegister}
                   type="submit"
                 >
                   <Typography align="center" color="textPrimary">
-                    Login
+                    Register
                   </Typography>
                 </Button>
               </Grid>
@@ -226,7 +241,7 @@ export default class LoginPage extends Component {
                     variant="caption" 
                     color="textSecondary"
                   >
-                    Don't have an account?
+                    Already have an account?
                   </Typography>
                 </Grid>
                 <Grid item>
@@ -234,13 +249,13 @@ export default class LoginPage extends Component {
                     variant="text" 
                     disableElevation
                     disableFocusRipple
-                    onClick={this.handleRegister}
+                    onClick={this.handleLogin}
                   >
                     <Typography 
                       variant="caption" 
                       color="secondary"
                     >
-                      Sign Up
+                      Sign In
                     </Typography>
                   </Button>
                 </Grid>

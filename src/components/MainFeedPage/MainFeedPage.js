@@ -284,8 +284,6 @@ export default class MainFeedPage extends Component {
     this.setState({
       isSearchEnabled: !this.state.isSearchEnabled
     });
-    
-    console.log(this.state.isSearchEnabled)
   };
 
   /**
@@ -364,7 +362,7 @@ export default class MainFeedPage extends Component {
             elevation={0}
           >
             <Toolbar>
-              <Topbar createNewNote={this.createNewNote} />
+              <Topbar enabled={this.state.isSearchEnabled}/>
             </Toolbar>
           </AppBar>
           <Toolbar/>

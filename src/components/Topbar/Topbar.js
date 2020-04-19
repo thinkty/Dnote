@@ -8,31 +8,21 @@
  */
 
 import React, { Component } from "react";
-import {
-  Grid,
-  Card,
-  TextField,
-  Fade,
-} from "@material-ui/core";
-
+import { Grid, TextField } from "@material-ui/core";
 
 export default class Topbar extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      createNoteCallback: props.createNewNote,
-      toggleMenu: false,
-      toProfilePage: false,
-      isSearchEnabled: false,
+      isSearchEnabled: this.props.enabled,
+      textInputRef: React.createRef(),
       searchValue: "",
-      onAddNew: false,
-
     };
   }
 
   /**
    * Handler for searching functionality
-   * 
+   *
    * @param event
    */
   onSearch = (event) => {
@@ -54,14 +44,8 @@ export default class Topbar extends Component {
   };
 
   render() {
-
     return (
-      <Grid
-        container
-        direction="column"
-        justify="center"
-        alignItems="center"
-      >
+      <Grid container direction="row" justify="center" alignItems="center">
         <Grid item>
           <form onSubmit={this.onSearch}>
             <TextField
@@ -69,6 +53,7 @@ export default class Topbar extends Component {
               placeholder="Search..."
               onChange={this.onSearchChange}
               type="input"
+              inputRef={this.state.textInputRef}
             />
           </form>
         </Grid>

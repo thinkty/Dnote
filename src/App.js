@@ -9,6 +9,7 @@ import { ThemeProvider, createMuiTheme } from "@material-ui/core";
 import LoginPage from "./components/LoginPage";
 import MainPage from "./components/MainFeedPage";
 import ProfilePage from "./components/ProfilePage";
+import RegisterPage from "./components/RegisterPage";
 import "typeface-muli";
 
 const theme = createMuiTheme({
@@ -44,7 +45,7 @@ export default function App() {
         <Switch>
           <Route exact path="/" component={LoginPage} />
           <Route exact path="/home" component={MainPage} />
-          <Route exact path="/signup" component={MainPage} />
+          <Route exact path="/register" component={RegisterPage} />
           <Route exact path="/home/profile" component={ProfilePage} />
         </Switch>
       </Router>
