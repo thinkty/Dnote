@@ -16,6 +16,7 @@ import {
 } from "@material-ui/core";
 import { Redirect } from "react-router-dom";
 import { Alert } from "@material-ui/lab";
+import axios from "axios";
 
 export default class LoginPage extends Component {
   constructor(props) {
@@ -78,11 +79,22 @@ export default class LoginPage extends Component {
       return;
     }
 
-    //TODO: implement the authentication part
-
-    // redirection after successful authentication
-    this.setState({
-      successful: true,
+    // authenticate
+    // TODO: Change request url /////////////////////////////////////////////////////////////////////////////////////////////////
+    axios.post("http://localhost:3001/api-user/auth", {
+      email: this.state.email,
+      password: this.state.pw
+    })
+    .then((response) => {
+      setTimeout(() => {
+        // redirection after successful authentication
+        this.setState({
+          successful: true,
+        });
+      }, 1000);
+    })
+    .catch((error) => {
+      this.alert(error.response.data);
     });
   };
 
