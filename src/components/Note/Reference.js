@@ -3,14 +3,36 @@
  */
 
 import React, { Component } from "react";
-import { IconButton, Grid, Typography } from "@material-ui/core";
+import { Grid, Typography, Paper } from "@material-ui/core";
+import { getMetadata } from "page-metadata-parser";
+const domino = require("domino");
+
 
 export default class Reference extends Component {
+
   constructor(props) {
     super(props);
     this.state = {
       link: props.link,
+      image: "",
+      title: "",
+      description: ""
     };
+  }
+
+  async componentDidMount() {
+    // Get the metadata from the given link
+    const response = await fetch("https://cors-anywhere.herokuapp.com/" + this.state.link);
+    const html = await response.text();
+    const doc = domino.createWindow(html).document;
+    const metadata = getMetadata(doc, this.state.link);
+
+    // update the props
+    this.setState({
+      image: metadata.image,
+      title: metadata.title,
+      description: metadata.description
+    });
   }
 
   /**
@@ -22,34 +44,56 @@ export default class Reference extends Component {
 
   render() {
     return (
-      <Grid container direction="row" justify="flex-start" alignItems="center">
-        <Grid item>
-          <IconButton onClick={this.toReference}>
-            <svg
-              width="24"
-              height="14"
-              viewBox="0 0 24 14"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                fillRule="evenodd"
-                clipRule="evenodd"
-                d="M7.77031 1.76047L6.23031 0.480469L0.820312 7.00047L6.23031 13.5205L7.77031 12.2405L3.42031 7.00047L7.77031 1.76047ZM7.00031 8.00047H9.00031V6.00047H7.00031V8.00047ZM15.0003 6.00047H17.0003V8.00047H15.0003V6.00047ZM11.0003 8.00047H13.0003V6.00047H11.0003V8.00047ZM16.2303 1.76047L17.7703 0.480469L23.1803 7.00047L17.7703 13.5205L16.2303 12.2405L20.5803 7.00047L16.2303 1.76047Z"
-                fill="#6698FA"
-              />
-            </svg>
-          </IconButton>
+      <Paper
+        elevation={5}
+        variant="elevation"
+        onClick={this.toReference}
+        style={{cursor: "pointer", width: "100%"}}
+      >
+        <Grid container direction="row" justify="flex-start" alignItems="center">
+          <Grid 
+            item 
+            style={{width: "10%"}}
+          >
+            <img 
+              src={this.state.image} 
+              alt="metatag for reference"
+              width="100%" 
+              height="100%" 
+              style={{filter: "grayscale(100%)"}}
+            />
+          </Grid>
+          <Grid
+            item
+            container
+            direction="column"
+            justify="flex-start"
+            alignItems="stretch"
+            style={{width: "80%", textOverflow: "ellipsis", overflow: "hidden"}}
+          >
+            <Grid item>
+              <Typography
+                noWrap
+                gutterBottom
+                variant="body2"
+                style={{color: "#A9A9A9"}}
+              >
+                {this.state.title}
+              </Typography>
+            </Grid>
+            <Grid item>
+              <Typography
+                noWrap
+                variant="caption"
+                style={{color: "#808080"}}
+              >
+                {this.state.description}
+              </Typography>
+            </Grid>
+          </Grid>
         </Grid>
-        <Grid
-          item
-          style={{ overflow: "hidden", textOverflow: "ellipsis", width: "80%" }}
-        >
-          <Typography variant="subtitle2" color="textSecondary" noWrap>
-            {this.state.link}
-          </Typography>
-        </Grid>
-      </Grid>
+      </Paper>
+
     );
   }
 }
