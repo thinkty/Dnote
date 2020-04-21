@@ -29,7 +29,7 @@ import {
 } from "@material-ui/core";
 import { Autocomplete } from "@material-ui/lab";
 import Icon from "../Icons";
-import Reference from "./Reference";
+import LinkPreview from "../LinkPreview";
 
 const iconList = require("../Icons/list.json");
 const monthNames = [
@@ -256,7 +256,7 @@ export default class Post extends Component {
             <div />
           ) : (
             <DialogActions>
-              <Reference link={this.state.reference} />
+              <LinkPreview link={this.state.reference} />
             </DialogActions>
           )}
         </Card>
