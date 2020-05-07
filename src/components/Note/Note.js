@@ -186,9 +186,13 @@ export default class Post extends Component {
       <Grid
         item
         xs={12}
-        style={{ width: "80%", minWidth: "360px", maxWidth: "800px" }}
+        style={{ 
+          width: "80%", 
+          minWidth: "360px", 
+          maxWidth: "800px" 
+        }}
       >
-        <Card>
+        <Card elevation={3}>
           <CardHeader
             avatar={<Icon name={this.state.lantool} />}
             action={

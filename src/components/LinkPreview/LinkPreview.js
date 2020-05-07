@@ -142,7 +142,7 @@ export default class LinkPreview extends Component {
                 variant="caption"
                 style={{color: "#808080"}}
               >
-                {this.state.link}
+                {this.state.description}
               </Typography>
             </Grid>
             <Grid item>
@@ -151,7 +151,7 @@ export default class LinkPreview extends Component {
                 variant="caption"
                 style={{color: "#808080"}}
               >
-                {this.state.description}
+                {this.state.link}
               </Typography>
             </Grid>
           </Grid>
