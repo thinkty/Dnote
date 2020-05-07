@@ -12,7 +12,7 @@ import {
   Button,
   Card,
   CardContent,
-  Snackbar
+  Snackbar,
 } from "@material-ui/core";
 import { Redirect } from "react-router-dom";
 import { Alert } from "@material-ui/lab";
@@ -27,11 +27,66 @@ export default class LoginPage extends Component {
       successful: false,
       signup: false,
       notify: false,
-      notification: ""
+      notification: "",
     };
 
     // TODO: Auto login
   }
+
+  /**
+   * Encrypt current user and register a new session to localStorage.
+   * If successful, redirect the user to main feed page.
+   * If not, display an error message.
+   */
+  registerNewUser = async () => {
+    // get the ip address of the user
+    // the ip address will be used for creating session id
+    let ip = await this.getIP();
+
+    // check ip
+    if (ip === null || typeof ip === "undefined" || ip.length <= 0) {
+      this.alertWithMessage("Error while authenticating");
+      return;
+    }
+
+    // create session id with ip and email
+    let tempSessionID = ip + "" + this.state.email;
+
+    // encrypt
+
+
+
+    // redirection after successful authentication
+    this.setState({
+      successful: true,
+    });
+  };
+
+  /**
+   * This is a helper function to acquire the IP address of the client.
+   * This method uses cloudflare's trace cgi to get the ip address.
+   * As time progresses, it might not work in the future.
+   *
+   * @returns the ip address of the client on success and an empty string
+   *          on failure.
+   */
+  getIP = async () => {
+    await axios
+      .get("https://www.cloudflare.com/cdn-cgi/trace")
+      .then((response) => {
+        // the response contains the ip address in plain text
+        // extract using regex from response.data
+        // supports both IPv4 and IPv6
+        let ip_regex = /([0-9]{1,3}(\.[0-9]{1,3}){3}|[a-f0-9]{1,4}(:[a-f0-9]{1,4}){7})/;
+        return ip_regex.exec(response.data)[1];
+      })
+      .catch((error) => {
+        this.alertWithMessage(
+          "Unable to use cdn-cgi/trace please contact developer"
+        );
+        console.error(error);
+      });
+  };
 
   /**
    * On change handler for input changes (email and password)
@@ -49,7 +104,7 @@ export default class LoginPage extends Component {
         pw: event.target.value,
       });
     } else {
-      this.alert("Error");
+      this.alertWithMessage("Error");
     }
   };
 
@@ -66,60 +121,59 @@ export default class LoginPage extends Component {
     }
 
     // authenticate
-    axios.post("https://darc-backend.herokuapp.com/api-user/auth", {
-      email: this.state.email,
-      password: this.state.pw
-    })
-    .then((response) => {
-      setTimeout(() => {
-        // redirection after successful authentication
-        this.setState({
-          successful: true,
-        });
-      }, 1000);
-    })
-    .catch((error) => {
-      // error from response
-      if (typeof error.response !== 'undefined' &&
-          typeof error.response.data !== 'undefined') {
-        this.alert(error.response.data);
-      }
-      // error related to axios
-      else {
-        console.log({error});
-      }
-    });
+    axios
+      .post("https://darc-backend.herokuapp.com/api-user/auth", {
+        email: this.state.email,
+        password: this.state.pw,
+      })
+      .then((response) => {
+        // save encrypted user's credential to localStorage
+        // and redirect to main feed page
+        this.registerNewUser();
+      })
+      .catch((error) => {
+        // error from response
+        if (
+          typeof error.response !== "undefined" &&
+          typeof error.response.data !== "undefined"
+        ) {
+          this.alertWithMessage(error.response.data);
+        }
+        // error related to axios
+        else {
+          console.log({ error });
+        }
+      });
   };
 
   /**
    * This is a helper function to validate the input on a local level.
    * Inputs are email and password inputted by the user.
-   * 
+   *
    * @returns true if validation is successful
    */
   validateEmailAndPW = () => {
-
     // basic parameter validation (email, pw)
     if (!this.state.email.match(/[a-z0-9A-Z]+@[a-z0-9A-Z]+\.[a-z0-9A-Z]+/g)) {
-      this.alert("Email Incorrect");
+      this.alertWithMessage("Email Incorrect");
       return false;
     }
     if (this.state.pw.length < 8) {
-      this.alert("Password is too short");
+      this.alertWithMessage("Password is too short");
       return false;
     }
     // check alphanumeric
     if (!this.state.pw.match(/[0-9]+/g)) {
-      this.alert("Password must include atleast one number");
+      this.alertWithMessage("Password must include atleast one number");
       return false;
     }
     if (!this.state.pw.match(/[a-zA-Z]+/g)) {
-      this.alert("Password must include atleast one alphabet");
+      this.alertWithMessage("Password must include atleast one alphabet");
       return false;
     }
 
     return true;
-  }
+  };
 
   /**
    * Handle register link clicked.
@@ -134,20 +188,20 @@ export default class LoginPage extends Component {
 
   /**
    * Show alert with custom message.
-   * 
+   *
    * @param  message  the message to display on the alert
    */
-  alert = (message) => {
+  alertWithMessage = (message) => {
     this.setState({
       notify: true,
-      notification: message
+      notification: message,
     });
-  }
+  };
   closeAlert = () => {
     this.setState({
-      notify: false
+      notify: false,
     });
-  }
+  };
 
   // TODO: use https://material-ui.com/components/transitions/
 
@@ -177,11 +231,7 @@ export default class LoginPage extends Component {
           autoHideDuration={3000}
           onClose={this.closeAlert}
         >
-          <Alert
-            variant="filled"
-            onClose={this.closeAlert}
-            severity="error"
-          >
+          <Alert variant="filled" onClose={this.closeAlert} severity="error">
             {this.state.notification}
           </Alert>
         </Snackbar>
@@ -258,24 +308,18 @@ export default class LoginPage extends Component {
                 spacing={0}
               >
                 <Grid item>
-                  <Typography 
-                    variant="caption" 
-                    color="textSecondary"
-                  >
+                  <Typography variant="caption" color="textSecondary">
                     Don't have an account?
                   </Typography>
                 </Grid>
                 <Grid item>
-                  <Button 
-                    variant="text" 
+                  <Button
+                    variant="text"
                     disableElevation
                     disableFocusRipple
                     onClick={this.handleRegister}
                   >
-                    <Typography 
-                      variant="caption" 
-                      color="secondary"
-                    >
+                    <Typography variant="caption" color="secondary">
                       Sign Up
                     </Typography>
                   </Button>

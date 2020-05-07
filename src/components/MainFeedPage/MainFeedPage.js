@@ -46,6 +46,8 @@ export default class MainFeedPage extends Component {
 
     // TODO: https://material-ui.com/components/skeleton/ use skeleton as placeholders before getting notes from the server
 
+    // TODO: make this big component into multiple sub components. As you can see, there are too many states in this single component.
+    
     // notes    = array of note components
     // notesMap = array of keys for notes for accessing the note easibly
     this.state = {
@@ -94,33 +96,6 @@ export default class MainFeedPage extends Component {
   }
 
   /**
-   * Helper function to remove the child component (note)
-   * TODO: replace time with _id
-   *
-   * @param  time  currently, we are distinguishing note by time (TODO: use _id)
-   */
-  detonate = (time) => {
-    let notes = this.state.notes;
-    let notesMap = this.state.notesMap;
-
-    // find the note with the correct key
-    for (let i = 0; i < notesMap.length; i++) {
-      if (notesMap[i] === time.toString()) {
-        // remove the current index from both map and array
-        notesMap.splice(i, 1);
-        notes.splice(i, 1);
-        break;
-      }
-    }
-
-    // update the state
-    this.setState({
-      notes: notes,
-      notesMap: notesMap,
-    });
-  };
-
-  /**
    * Make a request to the server for notes of the current user
    * upon loading the component.
    */
@@ -138,7 +113,7 @@ export default class MainFeedPage extends Component {
       );
       notesMap.push(note.time.toString());
     });
-    
+
     this.setState({
       notes: notes,
       notesMap: notesMap,
@@ -190,6 +165,33 @@ export default class MainFeedPage extends Component {
     this.setState({
       notes: notes,
       notesMap: map,
+    });
+  };
+
+  /**
+   * Helper function to remove the child component (note)
+   * TODO: replace time with _id
+   *
+   * @param  time  currently, we are distinguishing note by time (TODO: use _id)
+   */
+  detonate = (time) => {
+    let notes = this.state.notes;
+    let notesMap = this.state.notesMap;
+
+    // find the note with the correct key
+    for (let i = 0; i < notesMap.length; i++) {
+      if (notesMap[i] === time.toString()) {
+        // remove the current index from both map and array
+        notesMap.splice(i, 1);
+        notes.splice(i, 1);
+        break;
+      }
+    }
+
+    // update the state
+    this.setState({
+      notes: notes,
+      notesMap: notesMap,
     });
   };
 
@@ -462,7 +464,6 @@ export default class MainFeedPage extends Component {
         >
           {this.state.notes}
         </Grid>
-
 
         <Dialog open={this.state.onAddNew} onClose={this.toggleAddNewNote}>
           <DialogTitle>
