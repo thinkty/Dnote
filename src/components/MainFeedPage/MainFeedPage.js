@@ -35,6 +35,7 @@ import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import SearchIcon from "@material-ui/icons/Search";
 import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
 import ClearIcon from '@material-ui/icons/Clear';
+import FilterListIcon from '@material-ui/icons/FilterList';
 import Note from "../Note";
 import Topbar from "../Topbar";
 const iconList = require("../Icons/list.json");
@@ -64,14 +65,19 @@ export default class MainFeedPage extends Component {
       reference: "",
       actions: [
         {
+          icon: <CreateIcon color="secondary" />,
+          name: "Create",
+          onClick: this.toggleAddNewNote,
+        },
+        {
           icon: <SearchIcon color="secondary" />,
           name: "Search",
           onClick: this.enableSearch,
         },
         {
-          icon: <CreateIcon color="secondary" />,
-          name: "Create",
-          onClick: this.toggleAddNewNote,
+          icon: <FilterListIcon color="secondary"/>,
+          name: "Filter",
+          onClick: this.enableFilter,
         },
         {
           icon: <PersonIcon color="secondary" />,
@@ -116,6 +122,7 @@ export default class MainFeedPage extends Component {
 
   /**
    * Make a request to the server for notes of the current user
+   * upon loading the component.
    */
   componentDidMount() {
     //TODO: Fetch from remote database
@@ -131,6 +138,7 @@ export default class MainFeedPage extends Component {
       );
       notesMap.push(note.time.toString());
     });
+    
     this.setState({
       notes: notes,
       notesMap: notesMap,
@@ -138,9 +146,9 @@ export default class MainFeedPage extends Component {
   }
 
   /**
-   * This is a helper function that will be passed on to Topbar
+   * This is a helper function that will be passed on to Topbar.
    * Topbar will call this function to add the notes visually
-   * and also to the server
+   * and also to the server.
    *
    * @param  title     title of the new note
    * @param  content   content of new note
@@ -178,7 +186,7 @@ export default class MainFeedPage extends Component {
     let map = this.state.notesMap;
     map.unshift(noteData.time.toString()); // TODO: replace to id
 
-    // setState to rerender
+    // setState to rerender to update mainfeedpage
     this.setState({
       notes: notes,
       notesMap: map,
@@ -190,7 +198,7 @@ export default class MainFeedPage extends Component {
    */
   handleLogout = () => {
     // TODO: handle logout
-    console.log("Logging out!");
+    this.alertWithText("Logout feature is not ready", "info");
   };
 
   /**
@@ -205,7 +213,7 @@ export default class MainFeedPage extends Component {
   /**
    * Handler for changes on new note creation
    *
-   * @param  event
+   * @param  event  default event
    */
   onNewNoteChange = (event) => {
     this.setState({
@@ -250,23 +258,27 @@ export default class MainFeedPage extends Component {
       this.state.reference
     );
 
-    // close the dialog
+    // close the dialog for adding new note
     this.toggleAddNewNote();
-    // empty the title, content, lantool, reference for next time
+
+    // empty the title, content, lantool, reference for
+    // creating a new note next time
     this.setState({
       title: "",
       content: "",
       lantool: "",
       reference: "",
     });
+
     // close the dial menu
-    this.closeMenu();
+    this.closeSpeedDialMenu();
   };
 
   /**
-   * Handler for cancelling the creation of the new note
+   * Handler for canceling the creation of the new note
    */
   onCancel = () => {
+
     // reset the values
     this.setState({
       title: "",
@@ -274,48 +286,46 @@ export default class MainFeedPage extends Component {
       lantool: "",
       reference: "",
     });
+
     // close the dialog
     this.toggleAddNewNote();
   };
 
   /**
-   * Handle to enable the Search UI component
+   * Enable the Search UI component. (topbar)
    */
   enableSearch = () => {
-    // toggle search component
-    this.setState({
-      isSearchEnabled: !this.state.isSearchEnabled
-    });
+    this.setState({ isSearchEnabled: !this.state.isSearchEnabled });
   };
+
+  enableFilter = () => {
+    // TODO: enable filter bar
+    // in a filter bar, one should be able to filter by title, time, lantool
+    this.alertWithText("Filter feature is not ready", "info");
+  }
 
   /**
    * Handler for redirecting the user to the profile management page
    */
   toProfilePage = () => {
-    this.setState({
-      toProfilePage: true,
-    });
+    this.setState({ toProfilePage: true });
   };
 
   /**
    * Helper function for opening and closing the speed dial menu
    */
-  openMenu = () => {
-    this.setState({
-      toggleMenu: true,
-    });
+  openSpeedDialMenu = () => {
+    this.setState({ toggleMenu: true });
   };
-  closeMenu = () => {
-    this.setState({
-      toggleMenu: false,
-    });
+  closeSpeedDialMenu = () => {
+    this.setState({ toggleMenu: false });
   };
 
   /**
    * Helper function to show the user a custom alert with the desired message
    *
    * @param  message  the message to show the user
-   * @param  type     alert severity
+   * @param  type     alert severity: error, warning, info, success
    */
   alertWithText = (message, type) => {
     this.setState({
@@ -324,16 +334,16 @@ export default class MainFeedPage extends Component {
       alertType: type,
     });
   };
+
   /**
    * Helper function to close the custom alert
    */
   dismissAlert = () => {
-    this.setState({
-      alert: false,
-    });
+    this.setState({ alert: false });
   };
 
   render() {
+
     // redirection to the profile page
     if (this.state.toProfilePage) {
       return <Redirect from="/home" push to="/home/profile" />;
@@ -383,7 +393,7 @@ export default class MainFeedPage extends Component {
           style={{
             width: "60px",
             right: "10px",
-            top: "55%",
+            top: "50%",
             bottom: "50px"
           }}
         >
@@ -408,7 +418,7 @@ export default class MainFeedPage extends Component {
                 }
                 direction="up"
                 onClick={() => {
-                  this.state.toggleMenu ? this.closeMenu() : this.openMenu();
+                  this.state.toggleMenu ? this.closeSpeedDialMenu() : this.openSpeedDialMenu();
                 }}
                 open={this.state.toggleMenu}
               >
