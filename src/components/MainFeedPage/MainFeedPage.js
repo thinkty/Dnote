@@ -344,6 +344,7 @@ export default class MainFeedPage extends Component {
         <Fade in={this.state.isSearchEnabled}>
           <div>
           <AppBar 
+            // this is for the search bar
             position="fixed"
             color="secondary"
             variant="elevation"
@@ -374,11 +375,13 @@ export default class MainFeedPage extends Component {
           </div>
         </Fade>
         <AppBar
+          // this is for the menu speed dial
           position="fixed"
           color="transparent"
           variant="elevation"
           elevation={0}
           style={{
+            width: "60px",
             right: "10px",
             top: "55%",
             bottom: "50px"
