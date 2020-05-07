@@ -18,6 +18,7 @@ import {
   Button,
   TextField,
   Snackbar,
+  IconButton,
 } from "@material-ui/core";
 import {
   Autocomplete,
@@ -33,6 +34,7 @@ import PersonIcon from "@material-ui/icons/Person";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import SearchIcon from "@material-ui/icons/Search";
 import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
+import ClearIcon from '@material-ui/icons/Clear';
 import Note from "../Note";
 import Topbar from "../Topbar";
 const iconList = require("../Icons/list.json");
@@ -339,31 +341,34 @@ export default class MainFeedPage extends Component {
 
     return (
       <div>
-        <Snackbar
-          open={this.state.alert}
-          autoHideDuration={3000}
-          onClose={this.dismissAlert}
-          onClick={this.dismissAlert}
-        >
-          <Alert
-            severity={this.state.alertType}
-            onClose={this.dismissAlert}
-            variant="filled"
-          >
-            {this.state.alertMessage}
-          </Alert>
-        </Snackbar>
         <Fade in={this.state.isSearchEnabled}>
           <div>
           <AppBar 
             position="fixed"
-            color="transparent"
+            color="secondary"
             variant="elevation"
             elevation={0}
           >
-            <Toolbar>
-              <Topbar enabled={this.state.isSearchEnabled}/>
-            </Toolbar>
+            <Grid
+              container
+              direction="row"
+              justify="center"
+              alignItems="center"
+            >
+              <Toolbar>
+                <Topbar enabled={this.state.isSearchEnabled}/>
+              </Toolbar>
+              <IconButton
+                // disable search topbar on click
+                onClick={() => {
+                  this.setState({
+                    isSearchEnabled: false
+                  })
+                }}
+              >
+                <ClearIcon/>
+              </IconButton>
+            </Grid>
           </AppBar>
           <Toolbar/>
           </div>
@@ -374,50 +379,64 @@ export default class MainFeedPage extends Component {
           variant="elevation"
           elevation={0}
           style={{
-            left: "45%",
+            right: "10px",
             top: "55%",
+            bottom: "50px"
           }}
         >
-          <SpeedDial
-            ariaLabel="Application menu"
-            FabProps={{ color: "secondary", size: "large" }}
-            icon={
-              <SpeedDialIcon
-                icon={<AppsIcon style={{ color: "#fff" }} />}
-                openIcon={<KeyboardArrowUpIcon style={{ color: "#fff" }} />}
-              />
-            }
-            direction="up"
-            onClick={() => {
-              this.state.toggleMenu ? this.closeMenu() : this.openMenu();
-            }}
-            open={this.state.toggleMenu}
+          <Grid
+            container
+            direction="column"
+            justify="flex-end"
+            alignItems="flex-end"
           >
-            {this.state.actions.map((action) => {
-              // Using span to change the background color of the icon
-              // since mui's SpeedDialogAction does not have a color prop
-              let icon = (
-                <span
-                  style={{
-                    borderRadius: 100,
-                    backgroundColor: "#fff",
-                    padding: 8,
-                  }}
-                >
-                  {action.icon}
-                </span>
-              );
+            <Grid item>
+              <SpeedDial
+                ariaLabel="Application menu"
+                FabProps={{ 
+                  color: "secondary", 
+                  size: "large" 
+                }}
+                icon={
+                  <SpeedDialIcon
+                    icon={<AppsIcon style={{ color: "#fff" }} />}
+                    openIcon={<KeyboardArrowUpIcon style={{ color: "#fff" }} />}
+                  />
+                }
+                direction="up"
+                onClick={() => {
+                  this.state.toggleMenu ? this.closeMenu() : this.openMenu();
+                }}
+                open={this.state.toggleMenu}
+              >
+                {this.state.actions.map((action) => {
+                  // Using span to change the background color of the icon
+                  // since mui's SpeedDialogAction does not have a color prop
+                  let icon = (
+                    <span
+                      style={{
+                        borderRadius: 100,
+                        backgroundColor: "#fff",
+                        padding: 8,
+                        paddingBottom: 3
+                      }}
+                    >
+                      {action.icon}
+                    </span>
+                  );
 
-              return (
-                <SpeedDialAction
-                  key={action.name}
-                  icon={icon}
-                  tooltipTitle={action.name}
-                  onClick={action.onClick}
-                />
-              );
-            })}
-          </SpeedDial>
+                  return (
+                    <SpeedDialAction
+                      key={action.name}
+                      icon={icon}
+                      tooltipTitle={action.name}
+                      onClick={action.onClick}
+                    />
+                  );
+                })}
+              </SpeedDial>
+            </Grid>
+          </Grid>
         </AppBar>
 
         <Grid
@@ -430,6 +449,7 @@ export default class MainFeedPage extends Component {
         >
           {this.state.notes}
         </Grid>
+
 
         <Dialog open={this.state.onAddNew} onClose={this.toggleAddNewNote}>
           <DialogTitle>
@@ -508,6 +528,21 @@ export default class MainFeedPage extends Component {
             </Button>
           </DialogActions>
         </Dialog>
+
+        <Snackbar
+          open={this.state.alert}
+          autoHideDuration={3000}
+          onClose={this.dismissAlert}
+          onClick={this.dismissAlert}
+        >
+          <Alert
+            severity={this.state.alertType}
+            onClose={this.dismissAlert}
+            variant="filled"
+          >
+            {this.state.alertMessage}
+          </Alert>
+        </Snackbar>
       </div>
     );
   }

@@ -58,24 +58,10 @@ export default class RegisterPage extends Component {
     event.preventDefault();
 
     // basic parameter validation (email, pw)
-    if (!this.state.email.match(/[a-z0-9A-Z]+@[a-z0-9A-Z]+\.[a-z0-9A-Z]+/g)) {
-      this.alert("Email Incorrect");
+    if (!this.validateEmailAndPW()) {
       return;
     }
-    if (this.state.pw.length < 8) {
-      this.alert("Password is too short");
-      return;
-    }
-    // check alphanumeric
-    if (!this.state.pw.match(/[0-9]+/g)) {
-      this.alert("Password must include atleast one number");
-      return;
-    }
-    if (!this.state.pw.match(/[a-zA-Z]+/g)) {
-      this.alert("Password must include atleast one alphabet");
-      return;
-    }
-
+    
     // send to server
     axios.post("https://darc-backend.herokuapp.com/api-user/register", {
       email: this.state.email,
@@ -90,9 +76,47 @@ export default class RegisterPage extends Component {
       }, 1000);
     })
     .catch((error) => {
-      this.alert(error.response.data);
+      // error from response
+      if (typeof error.response !== 'undefined' &&
+          typeof error.response.data !== 'undefined') {
+        this.alert(error.response.data);
+      }
+      // error related to axios
+      else {
+        console.log({error});
+      }
     });
   };
+
+  /**
+   * This is a helper function to validate the input on a local level.
+   * Inputs are email and password inputted by the user.
+   * 
+   * @returns true if validation is successful
+   */
+  validateEmailAndPW = () => {
+
+    // basic parameter validation (email, pw)
+    if (!this.state.email.match(/[a-z0-9A-Z]+@[a-z0-9A-Z]+\.[a-z0-9A-Z]+/g)) {
+      this.alert("Email Incorrect");
+      return false;
+    }
+    if (this.state.pw.length < 8) {
+      this.alert("Password is too short");
+      return false;
+    }
+    // check alphanumeric
+    if (!this.state.pw.match(/[0-9]+/g)) {
+      this.alert("Password must include atleast one number");
+      return false;
+    }
+    if (!this.state.pw.match(/[a-zA-Z]+/g)) {
+      this.alert("Password must include atleast one alphabet");
+      return false;
+    }
+
+    return true;
+  }
 
   /**
    * Show alert with custom message

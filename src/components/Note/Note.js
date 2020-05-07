@@ -261,6 +261,7 @@ export default class Post extends Component {
           )}
         </Card>
 
+
         <Dialog
           open={this.state.isEditNote}
           onClose={() => {

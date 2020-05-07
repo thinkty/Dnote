@@ -60,22 +60,8 @@ export default class LoginPage extends Component {
     // prevent defualt behavior of form submit
     event.preventDefault();
 
-    // basic parameter validation (email, pw)
-    if (!this.state.email.match(/[a-z0-9A-Z]+@[a-z0-9A-Z]+\.[a-z0-9A-Z]+/g)) {
-      this.alert("Email Incorrect");
-      return;
-    }
-    if (this.state.pw.length < 8) {
-      this.alert("Password is too short");
-      return;
-    }
-    // check alphanumeric
-    if (!this.state.pw.match(/[0-9]+/g)) {
-      this.alert("Password must include atleast one number");
-      return;
-    }
-    if (!this.state.pw.match(/[a-zA-Z]+/g)) {
-      this.alert("Password must include atleast one alphabet");
+    // validate locally
+    if (!this.validateEmailAndPW()) {
       return;
     }
 
@@ -93,12 +79,51 @@ export default class LoginPage extends Component {
       }, 1000);
     })
     .catch((error) => {
-      this.alert(error.response.data);
+      // error from response
+      if (typeof error.response !== 'undefined' &&
+          typeof error.response.data !== 'undefined') {
+        this.alert(error.response.data);
+      }
+      // error related to axios
+      else {
+        console.log({error});
+      }
     });
   };
 
   /**
-   * Handle register link clicked
+   * This is a helper function to validate the input on a local level.
+   * Inputs are email and password inputted by the user.
+   * 
+   * @returns true if validation is successful
+   */
+  validateEmailAndPW = () => {
+
+    // basic parameter validation (email, pw)
+    if (!this.state.email.match(/[a-z0-9A-Z]+@[a-z0-9A-Z]+\.[a-z0-9A-Z]+/g)) {
+      this.alert("Email Incorrect");
+      return false;
+    }
+    if (this.state.pw.length < 8) {
+      this.alert("Password is too short");
+      return false;
+    }
+    // check alphanumeric
+    if (!this.state.pw.match(/[0-9]+/g)) {
+      this.alert("Password must include atleast one number");
+      return false;
+    }
+    if (!this.state.pw.match(/[a-zA-Z]+/g)) {
+      this.alert("Password must include atleast one alphabet");
+      return false;
+    }
+
+    return true;
+  }
+
+  /**
+   * Handle register link clicked.
+   * Redirect the user to registration page.
    */
   handleRegister = () => {
     // redirection
@@ -108,7 +133,7 @@ export default class LoginPage extends Component {
   };
 
   /**
-   * Show alert with custom message
+   * Show alert with custom message.
    * 
    * @param  message  the message to display on the alert
    */
