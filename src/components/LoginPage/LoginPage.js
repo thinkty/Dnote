@@ -39,12 +39,22 @@ export default class LoginPage extends Component {
    * If not, display an error message.
    */
   registerNewUser = async () => {
+
+    // TODO: for some reason, the getIP() is returning a undefined variable even if the ip address successfully prints on console
+
+    this.setState({
+      successful: true,
+    });
+    return;
+
     // get the ip address of the user
     // the ip address will be used for creating session id
+    // eslint-disable-next-line
     let ip = await this.getIP();
 
     // check ip
     if (ip === null || typeof ip === "undefined" || ip.length <= 0) {
+      console.log("ip : " + ip);
       this.alertWithMessage("Error while authenticating");
       return;
     }
@@ -56,10 +66,9 @@ export default class LoginPage extends Component {
     console.log(document.cookie);
     console.log(tempSessionID);
 
-    // TODO: create secure cookie
+    // TODO: create secure cookie for session (auto login)
     // https://developer.mozilla.org/en-US/docs/Web/API/Document/cookie
     // https://humanwhocodes.com/blog/2009/05/12/cookies-and-security/
-
 
     // redirection after successful authentication
     this.setState({
@@ -83,7 +92,9 @@ export default class LoginPage extends Component {
         // extract using regex from response.data
         // supports both IPv4 and IPv6
         let ip_regex = /([0-9]{1,3}(\.[0-9]{1,3}){3}|[a-f0-9]{1,4}(:[a-f0-9]{1,4}){7})/;
-        return ip_regex.exec(response.data)[1];
+        let results = ip_regex.exec(response.data);
+        console.log(results[1]);
+        return results[1];
       })
       .catch((error) => {
         this.alertWithMessage(
