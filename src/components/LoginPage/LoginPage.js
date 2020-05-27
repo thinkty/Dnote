@@ -34,7 +34,7 @@ export default class LoginPage extends Component {
   }
 
   /**
-   * Encrypt current user and register a new session to localStorage.
+   * Encrypt current user and register a new session to cookie.
    * If successful, redirect the user to main feed page.
    * If not, display an error message.
    */
@@ -53,7 +53,12 @@ export default class LoginPage extends Component {
     let tempSessionID = ip + "" + this.state.email;
 
     // encrypt
+    console.log(document.cookie);
+    console.log(tempSessionID);
 
+    // TODO: create secure cookie
+    // https://developer.mozilla.org/en-US/docs/Web/API/Document/cookie
+    // https://humanwhocodes.com/blog/2009/05/12/cookies-and-security/
 
 
     // redirection after successful authentication
@@ -127,7 +132,7 @@ export default class LoginPage extends Component {
         password: this.state.pw,
       })
       .then((response) => {
-        // save encrypted user's credential to localStorage
+        // save encrypted user's sessionid
         // and redirect to main feed page
         this.registerNewUser();
       })
@@ -225,7 +230,7 @@ export default class LoginPage extends Component {
     }
 
     return (
-      <Grid container direction="column" justify="center" alignItems="center">
+      <div>
         <Snackbar
           open={this.state.notify}
           autoHideDuration={3000}
@@ -235,7 +240,15 @@ export default class LoginPage extends Component {
             {this.state.notification}
           </Alert>
         </Snackbar>
-        <Card raised>
+
+        <Card 
+          raised
+          style={{
+            width:"300px",
+            margin: "auto",
+            marginTop: "100px"
+          }}  
+        >
           <CardContent>
             <Grid
               item
@@ -328,7 +341,8 @@ export default class LoginPage extends Component {
             </Grid>
           </CardContent>
         </Card>
-      </Grid>
+      </div>
+      
     );
   }
 }
