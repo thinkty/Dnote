@@ -12,6 +12,8 @@ import ProfilePage from "./components/ProfilePage";
 import RegisterPage from "./components/RegisterPage";
 import "typeface-muli"; 
 
+// TODO: : add localstorage event listener to change the colors and customize
+
 const theme = createMuiTheme({
   palette: {
     background: {
