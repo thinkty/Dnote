@@ -3,7 +3,7 @@
  */
 
 import React, { Component } from "react";
-import { Grid, Typography, Paper } from "@material-ui/core";
+import { Grid, Typography, Paper, Tooltip, Fade } from "@material-ui/core";
 import { getMetadata } from "page-metadata-parser";
 const domino = require('domino');
 const psl = require('psl');
@@ -80,83 +80,91 @@ export default class LinkPreview extends Component {
 
   render() {
     return (
-      <Paper
-        variant="outlined"
-        onClick={this.toReference}
-        style={{
-          cursor: "pointer", 
-          width: "100%",
-        }}
+      <Tooltip
+        arrow
+        title="Click to visit link"
+        placement="top"
+        TransitionComponent={Fade}
       >
-        <Grid 
-          container 
-          direction="row" 
-          justify="flex-start" 
-          alignItems="center"
+        <Paper
+          variant="outlined"
+          onClick={this.toReference}
           style={{
-            margin: "10px"
+            cursor: "pointer", 
+            width: "100%",
           }}
         >
-          <Grid
-            // Grid container for meta tags
-            item
-            container
-            direction="column"
-            justify="flex-start"
-            alignItems="stretch"
-            style={{width: "95%", textOverflow: "ellipsis", overflow: "hidden"}}
+          <Grid 
+            container 
+            direction="row" 
+            justify="flex-start" 
+            alignItems="center"
+            style={{
+              margin: "10px"
+            }}
           >
-            <Grid 
-              // Grid container for linke title and hostname
+            <Grid
+              // Grid container for meta tags
               item
               container
-              direction="row"
+              direction="column"
               justify="flex-start"
-              alignItems="center"
-              spacing={1}
+              alignItems="stretch"
+              style={{width: "95%", textOverflow: "ellipsis", overflow: "hidden"}}
             >
+              <Grid 
+                // Grid container for linke title and hostname
+                item
+                container
+                direction="row"
+                justify="flex-start"
+                alignItems="center"
+                spacing={1}
+              >
+                <Grid item>
+                  <Typography
+                    noWrap
+                    gutterBottom
+                    variant="body2"
+                    style={{color: "#32CD32"}}
+                  >
+                    {this.state.hostname}
+                  </Typography>
+                </Grid>
+                <Grid item>
+                  <Typography
+                    noWrap
+                    gutterBottom
+                    variant="body2"
+                    style={{color: "#A9A9A9"}}
+                  >
+                    {this.state.title}
+                  </Typography>
+                </Grid>
+              </Grid>
               <Grid item>
                 <Typography
                   noWrap
-                  gutterBottom
-                  variant="body2"
-                  style={{color: "#32CD32"}}
+                  variant="caption"
+                  style={{color: "#808080"}}
                 >
-                  {this.state.hostname}
+                  {this.state.description}
                 </Typography>
               </Grid>
               <Grid item>
                 <Typography
                   noWrap
-                  gutterBottom
-                  variant="body2"
-                  style={{color: "#A9A9A9"}}
+                  variant="caption"
+                  style={{color: "#808080"}}
                 >
-                  {this.state.title}
+                  {this.state.link}
                 </Typography>
               </Grid>
-            </Grid>
-            <Grid item>
-              <Typography
-                noWrap
-                variant="caption"
-                style={{color: "#808080"}}
-              >
-                {this.state.description}
-              </Typography>
-            </Grid>
-            <Grid item>
-              <Typography
-                noWrap
-                variant="caption"
-                style={{color: "#808080"}}
-              >
-                {this.state.link}
-              </Typography>
             </Grid>
           </Grid>
-        </Grid>
-      </Paper>
+        </Paper>
+      </Tooltip>
+      
 
     );
   }
