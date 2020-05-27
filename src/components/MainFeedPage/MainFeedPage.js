@@ -353,10 +353,10 @@ export default class MainFeedPage extends Component {
 
     return (
       <div>
+        {/* Search bar in the top */}
         <Fade in={this.state.isSearchEnabled}>
           <div>
           <AppBar 
-            // this is for the search bar
             position="fixed"
             color="secondary"
             variant="elevation"
@@ -386,8 +386,9 @@ export default class MainFeedPage extends Component {
           <Toolbar/>
           </div>
         </Fade>
+
+        {/* Speed dial menu on the right */}
         <AppBar
-          // this is for the menu speed dial
           position="fixed"
           color="transparent"
           variant="elevation"
@@ -454,6 +455,7 @@ export default class MainFeedPage extends Component {
           </Grid>
         </AppBar>
 
+        {/* Container to show the notes */}
         <Grid
           item
           container
@@ -465,6 +467,7 @@ export default class MainFeedPage extends Component {
           {this.state.notes}
         </Grid>
 
+        {/* Adding new note */}
         <Dialog open={this.state.onAddNew} onClose={this.toggleAddNewNote}>
           <DialogTitle>
             <Typography>New Note</Typography>

@@ -10,7 +10,7 @@ import LoginPage from "./components/LoginPage";
 import MainPage from "./components/MainFeedPage";
 import ProfilePage from "./components/ProfilePage";
 import RegisterPage from "./components/RegisterPage";
-import "typeface-muli";
+import "typeface-muli"; 
 
 const theme = createMuiTheme({
   palette: {

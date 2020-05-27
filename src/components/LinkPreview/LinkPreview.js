@@ -26,7 +26,7 @@ export default class LinkPreview extends Component {
    */
   componentDidMount() {
 
-    fetch("https://cors-anywhere.herokuapp.com/" + this.state.link)
+    fetch("https://private-cors-anywhere.herokuapp.com/" + this.state.link)
     .then(async response => {
 
       // get the html and extract the metadata
