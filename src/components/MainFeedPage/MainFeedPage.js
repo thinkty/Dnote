@@ -19,6 +19,7 @@ import {
   TextField,
   Snackbar,
   IconButton,
+  Paper,
 } from "@material-ui/core";
 import {
   Autocomplete,
@@ -40,6 +41,7 @@ import Note from "../Note";
 import Topbar from "../Topbar";
 import axios from "axios";
 import ReactQuill from "react-quill";
+import 'react-quill/dist/quill.snow.css';
 const iconList = require("../Icons/list.json");
 
 export default class MainFeedPage extends Component {
@@ -515,35 +517,35 @@ export default class MainFeedPage extends Component {
               onChange={this.onNewNoteChange}
               value={this.state.title}
             />
-            <ReactQuill
-              id="content"
-              theme={null}
-              onChange={(value) => {
-                this.setState({
-                  content: value,
-                });
-              }}
-              value={this.state.content}
-              modules={{
-                toolbar: [
-                  ["bold", "italic", "underline", "code"],
-                  [
-                    { list: "ordered" },
-                    { list: "bullet" },
+            <Paper
+              elevation={3}
+              variant="outlined"
+            >
+              <ReactQuill
+                theme="snow"
+                style={{fontFamily: "Muli", zIndex: "1"}}
+                onChange={(value) => {
+                  this.setState({
+                    content: value,
+                  });
+                }}
+                value={this.state.content}
+                modules={{
+                  toolbar: [
+                    ["bold", "italic", "underline", "code"],
+                    ["link"],
                   ],
-                  ["link"],
-                ],
-              }}
-              formats={[
-                "bold",
-                "italic",
-                "underline",
-                "code",
-                "list",
-                "bullet",
-                "link",
-              ]}
-            />
+                }}
+                formats={[
+                  "bold",
+                  "italic",
+                  "underline",
+                  "code",
+                  "link",
+                ]}
+              />
+            </Paper>
+            
             <Autocomplete
               id="lantool"
               autoHighlight
