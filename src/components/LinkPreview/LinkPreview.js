@@ -5,6 +5,7 @@
 import React, { Component } from "react";
 import { Grid, Typography, Paper, } from "@material-ui/core";
 import { getMetadata } from "page-metadata-parser";
+import { Skeleton } from "@material-ui/lab";
 const domino = require('domino');
 const psl = require('psl');
 
@@ -114,34 +115,57 @@ export default class LinkPreview extends Component {
                 spacing={1}
               >
                 <Grid item>
-                  <Typography
-                    noWrap
-                    gutterBottom
-                    variant="body2"
-                    style={{color: "#32CD32"}}
-                  >
-                    {this.state.hostname}
-                  </Typography>
+                  {this.state.hostname === "" ? (
+                    <Skeleton
+                      animation="wave"
+                      variant="text"
+                      width={100}
+                    />
+                  ) : (
+                    <Typography
+                      noWrap
+                      variant="body2"
+                      style={{color: "#32CD32"}}
+                    >
+                      {this.state.hostname}
+                    </Typography>
+                  )}
                 </Grid>
                 <Grid item>
-                  <Typography
-                    noWrap
-                    gutterBottom
-                    variant="body2"
-                    style={{color: "#A9A9A9"}}
-                  >
-                    {this.state.title}
-                  </Typography>
+                  {this.state.title === "" ? (
+                    <Skeleton
+                      animation="wave"
+                      variant="text"
+                      width={200}
+                    />
+                  ) : (
+                    <Typography
+                      noWrap
+                      variant="body2"
+                      style={{color: "#A9A9A9"}}
+                    >
+                      {this.state.title}
+                    </Typography>
+                  )}
                 </Grid>
               </Grid>
               <Grid item>
-                <Typography
-                  noWrap
-                  variant="caption"
-                  style={{color: "#808080"}}
-                >
-                  {this.state.description}
-                </Typography>
+                {/* sometimes, websites don't have description, so we use title for here */}
+                {this.state.title === "" ? (
+                  <Skeleton
+                    animation="wave"
+                    variant="text"
+                    width="80%"
+                  />
+                ) : (
+                  <Typography
+                    noWrap
+                    variant="caption"
+                    style={{color: "#808080"}}
+                  >
+                    {this.state.description}
+                  </Typography>
+                )}
               </Grid>
               <Grid item>
                 <Typography
