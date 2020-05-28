@@ -41,7 +41,7 @@ import Note from "../Note";
 import Topbar from "../Topbar";
 import axios from "axios";
 import ReactQuill from "react-quill";
-import 'react-quill/dist/quill.snow.css';
+import "react-quill/dist/quill.snow.css";
 const iconList = require("../Icons/list.json");
 
 export default class MainFeedPage extends Component {
@@ -263,15 +263,18 @@ export default class MainFeedPage extends Component {
    * Handler for submitting (creating) the new note
    */
   onSubmit = () => {
-
     // Make sure none of the details are empty
     if (this.state.title === "") {
       this.alertWithText("Title cannot be empty", "error");
       return;
     }
-    if (this.state.content === "" || this.state.content === "<p><br></p>"
-        || this.state.content === '<p><strong><span class="ql-cursor"></span></strong></p>'
-        || this.state.content === '<ol><li><br></li></ol>') {
+    if (
+      this.state.content === "" ||
+      this.state.content === "<p><br></p>" ||
+      this.state.content ===
+        '<p><strong><span class="ql-cursor"></span></strong></p>' ||
+      this.state.content === "<ol><li><br></li></ol>"
+    ) {
       this.alertWithText("Content cannot be empty", "error");
       return;
     }
@@ -308,7 +311,6 @@ export default class MainFeedPage extends Component {
    * Handler for canceling the creation of the new note
    */
   onCancel = () => {
-
     // reset the values
     this.setState({
       title: "",
@@ -497,9 +499,10 @@ export default class MainFeedPage extends Component {
         </Grid>
 
         {/* Adding new note */}
-        <Dialog 
-          open={this.state.onAddNew} 
+        <Dialog
+          open={this.state.onAddNew}
           onClose={this.toggleAddNewNote}
+          fullWidth
         >
           <DialogTitle>
             <Typography>New Note</Typography>
@@ -518,12 +521,19 @@ export default class MainFeedPage extends Component {
               value={this.state.title}
             />
             <Paper
-              elevation={3}
+              elevation={0}
               variant="outlined"
+              style={{
+                marginTop: "20px",
+                marginBottom: "10px",
+                borderColor: "transparent",
+              }}
             >
+              <Typography color="textSecondary" gutterBottom>
+                Content *
+              </Typography>
               <ReactQuill
                 theme="snow"
-                style={{fontFamily: "Muli", zIndex: "1"}}
                 onChange={(value) => {
                   this.setState({
                     content: value,
@@ -532,7 +542,20 @@ export default class MainFeedPage extends Component {
                 value={this.state.content}
                 modules={{
                   toolbar: [
-                    ["bold", "italic", "underline", "code"],
+                    [
+                      "bold",
+                      "italic",
+                      "underline",
+                      "strike",
+                      "blockquote",
+                      "code",
+                    ],
+                    [
+                      { list: "ordered" },
+                      { list: "bullet" },
+                      { indent: "-1" },
+                      { indent: "+1" },
+                    ],
                     ["link"],
                   ],
                 }}
@@ -540,12 +563,17 @@ export default class MainFeedPage extends Component {
                   "bold",
                   "italic",
                   "underline",
+                  "strike",
+                  "blockquote",
                   "code",
+                  "list",
+                  "bullet",
+                  "indent",
                   "link",
                 ]}
               />
             </Paper>
-            
+
             <Autocomplete
               id="lantool"
               autoHighlight
