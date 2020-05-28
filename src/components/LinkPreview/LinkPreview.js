@@ -3,7 +3,7 @@
  */
 
 import React, { Component } from "react";
-import { Grid, Typography, Paper, Tooltip, Fade } from "@material-ui/core";
+import { Grid, Typography, Paper, } from "@material-ui/core";
 import { getMetadata } from "page-metadata-parser";
 const domino = require('domino');
 const psl = require('psl');
@@ -71,24 +71,16 @@ export default class LinkPreview extends Component {
     return hostname;
   }
 
-  /**
-   * Helper function to redirect to the reference link
-   */
-  toReference = () => {
-    window.location = this.state.link;
-  };
-
   render() {
     return (
-      <Tooltip
-        arrow
-        title="Click to visit link"
-        placement="top"
-        TransitionComponent={Fade}
+      <a 
+        href={this.state.link}
+        target="_blank"
+        rel="noopener noreferrer"
+        style={{width: "100%", textDecoration: "none"}}
       >
         <Paper
           variant="outlined"
-          onClick={this.toReference}
           style={{
             cursor: "pointer", 
             width: "100%",
@@ -163,9 +155,7 @@ export default class LinkPreview extends Component {
             </Grid>
           </Grid>
         </Paper>
-      </Tooltip>
-      
-
+      </a>
     );
   }
 }

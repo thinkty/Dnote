@@ -120,7 +120,6 @@ export default class MainFeedPage extends Component {
 
       // add notes to the container
       res.data.forEach((note) => {
-        console.log(note)
         notes.push(
           <Note key={note._id} data={note} detonate={this.detonate} />
         );
