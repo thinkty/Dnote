@@ -34,22 +34,20 @@ import PersonIcon from "@material-ui/icons/Person";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import SearchIcon from "@material-ui/icons/Search";
 import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
-import ClearIcon from '@material-ui/icons/Clear';
-import FilterListIcon from '@material-ui/icons/FilterList';
+import ClearIcon from "@material-ui/icons/Clear";
+import FilterListIcon from "@material-ui/icons/FilterList";
 import Note from "../Note";
 import Topbar from "../Topbar";
 import axios from "axios";
+import ReactQuill from "react-quill";
 const iconList = require("../Icons/list.json");
-
 
 export default class MainFeedPage extends Component {
   constructor(props) {
     super(props);
 
-    // TODO: https://material-ui.com/components/skeleton/ use skeleton as placeholders before getting notes from the server
-
     // TODO: make this big component into multiple sub components. As you can see, there are too many states in this single component.
-    
+
     // notes    = array of note components
     // notesMap = array of keys for notes for accessing the note easibly
     this.state = {
@@ -79,7 +77,7 @@ export default class MainFeedPage extends Component {
           onClick: this.enableSearch,
         },
         {
-          icon: <FilterListIcon color="secondary"/>,
+          icon: <FilterListIcon color="secondary" />,
           name: "Filter",
           onClick: this.enableFilter,
         },
@@ -102,7 +100,6 @@ export default class MainFeedPage extends Component {
    * upon loading the component.
    */
   componentDidMount() {
-    
     this.alertWithText("Retrieving notes", "info");
 
     // get user id
@@ -111,34 +108,34 @@ export default class MainFeedPage extends Component {
 
     //fetch notes from remote database
     axios
-    .get("https://darc-backend.herokuapp.com/api-note/getnotes", { 
-      params: {
-        user: id
-      }
-    })
-    .then((res) => {
-      let notes = [];
-      let notesMap = [];
+      .get("https://darc-backend.herokuapp.com/api-note/getnotes", {
+        params: {
+          user: id,
+        },
+      })
+      .then((res) => {
+        let notes = [];
+        let notesMap = [];
 
-      // add notes to the container
-      res.data.forEach((note) => {
-        notes.push(
-          <Note key={note._id} data={note} detonate={this.detonate} />
-        );
-        notesMap.push(note._id);
-      });
+        // add notes to the container
+        res.data.forEach((note) => {
+          notes.push(
+            <Note key={note._id} data={note} detonate={this.detonate} />
+          );
+          notesMap.push(note._id);
+        });
 
-      this.alertWithText("Successfully retrieved notes", "success");
-      this.setState({
-        notes: notes,
-        notesMap: notesMap,
+        this.alertWithText("Successfully retrieved notes", "success");
+        this.setState({
+          notes: notes,
+          notesMap: notesMap,
+        });
+      })
+      .catch((error) => {
+        this.alertWithText("Failed to get notes", "error");
+        console.error(error);
+        return;
       });
-    })
-    .catch((error) => {
-      this.alertWithText("Failed to get notes", "error");
-      console.error(error);
-      return;
-    });
   }
 
   /**
@@ -151,7 +148,6 @@ export default class MainFeedPage extends Component {
    * @param  reference reference related to new note
    */
   createNewNote = async (title, content, lantool, reference) => {
-
     let noteData = {
       title: title,
       content: content,
@@ -162,16 +158,16 @@ export default class MainFeedPage extends Component {
 
     //TODO: saving user information in local storage is extremely dangerous
     // add user id (objectId) to noteData
-    noteData.user = window.localStorage.getItem("_id"); 
+    noteData.user = window.localStorage.getItem("_id");
 
     // send request to the server to add new note and get the _id of new note
     let _id = await axios
-    .post("https://darc-backend.herokuapp.com/api-note/create", noteData)
-    .catch((error) => {
-      this.alertWithText("Failed to add new note", "error");
-      console.error(error);
-      return;
-    });
+      .post("https://darc-backend.herokuapp.com/api-note/create", noteData)
+      .catch((error) => {
+        this.alertWithText("Failed to add new note", "error");
+        console.error(error);
+        return;
+      });
 
     // visually update the notes
     // put the _id also as it is needed for modifying the note
@@ -180,11 +176,7 @@ export default class MainFeedPage extends Component {
     // add the new note to the state
     let notes = this.state.notes;
     notes.push(
-      <Note
-        key={noteData.id}
-        data={noteData}
-        detonate={this.detonate}
-      />
+      <Note key={noteData.id} data={noteData} detonate={this.detonate} />
     );
     // also add the key to the map
     let map = this.state.notesMap;
@@ -269,21 +261,24 @@ export default class MainFeedPage extends Component {
    * Handler for submitting (creating) the new note
    */
   onSubmit = () => {
+
     // Make sure none of the details are empty
     if (this.state.title === "") {
       this.alertWithText("Title cannot be empty", "error");
       return;
     }
-    if (this.state.content === "") {
+    if (this.state.content === "" || this.state.content === "<p><br></p>"
+        || this.state.content === '<p><strong><span class="ql-cursor"></span></strong></p>'
+        || this.state.content === '<ol><li><br></li></ol>') {
       this.alertWithText("Content cannot be empty", "error");
       return;
     }
     if (this.state.lantool === "") {
-      this.alertWithText("Please choose a language or tool", "error");
+      this.alertWithText("Please select a language or tool", "error");
       return;
     }
     this.alertWithText("Creating new note", "info");
-    
+
     // call the function for adding note graphically and also in the server
     this.createNewNote(
       this.state.title,
@@ -335,7 +330,7 @@ export default class MainFeedPage extends Component {
     // TODO: enable filter bar
     // in a filter bar, one should be able to filter by title, time, lantool
     this.alertWithText("Filter feature is not ready", "info");
-  }
+  };
 
   /**
    * Handler for redirecting the user to the profile management page
@@ -376,7 +371,6 @@ export default class MainFeedPage extends Component {
   };
 
   render() {
-
     // redirection to the profile page
     if (this.state.toProfilePage) {
       return <Redirect from="/home" push to="/home/profile" />;
@@ -387,34 +381,34 @@ export default class MainFeedPage extends Component {
         {/* Search bar in the top */}
         <Fade in={this.state.isSearchEnabled}>
           <div>
-          <AppBar 
-            position="fixed"
-            color="secondary"
-            variant="elevation"
-            elevation={0}
-          >
-            <Grid
-              container
-              direction="row"
-              justify="center"
-              alignItems="center"
+            <AppBar
+              position="fixed"
+              color="secondary"
+              variant="elevation"
+              elevation={0}
             >
-              <Toolbar>
-                <Topbar enabled={this.state.isSearchEnabled}/>
-              </Toolbar>
-              <IconButton
-                // disable search topbar on click
-                onClick={() => {
-                  this.setState({
-                    isSearchEnabled: false
-                  })
-                }}
+              <Grid
+                container
+                direction="row"
+                justify="center"
+                alignItems="center"
               >
-                <ClearIcon/>
-              </IconButton>
-            </Grid>
-          </AppBar>
-          <Toolbar/>
+                <Toolbar>
+                  <Topbar enabled={this.state.isSearchEnabled} />
+                </Toolbar>
+                <IconButton
+                  // disable search topbar on click
+                  onClick={() => {
+                    this.setState({
+                      isSearchEnabled: false,
+                    });
+                  }}
+                >
+                  <ClearIcon />
+                </IconButton>
+              </Grid>
+            </AppBar>
+            <Toolbar />
           </div>
         </Fade>
 
@@ -428,7 +422,7 @@ export default class MainFeedPage extends Component {
             width: "60px",
             right: "10px",
             top: "50%",
-            bottom: "50px"
+            bottom: "50px",
           }}
         >
           <Grid
@@ -440,9 +434,9 @@ export default class MainFeedPage extends Component {
             <Grid item>
               <SpeedDial
                 ariaLabel="Application menu"
-                FabProps={{ 
-                  color: "secondary", 
-                  size: "large" 
+                FabProps={{
+                  color: "secondary",
+                  size: "large",
                 }}
                 icon={
                   <SpeedDialIcon
@@ -452,7 +446,9 @@ export default class MainFeedPage extends Component {
                 }
                 direction="up"
                 onClick={() => {
-                  this.state.toggleMenu ? this.closeSpeedDialMenu() : this.openSpeedDialMenu();
+                  this.state.toggleMenu
+                    ? this.closeSpeedDialMenu()
+                    : this.openSpeedDialMenu();
                 }}
                 open={this.state.toggleMenu}
               >
@@ -465,7 +461,7 @@ export default class MainFeedPage extends Component {
                         borderRadius: 100,
                         backgroundColor: "#fff",
                         padding: 8,
-                        paddingBottom: 3
+                        paddingBottom: 3,
                       }}
                     >
                       {action.icon}
@@ -499,7 +495,10 @@ export default class MainFeedPage extends Component {
         </Grid>
 
         {/* Adding new note */}
-        <Dialog open={this.state.onAddNew} onClose={this.toggleAddNewNote}>
+        <Dialog 
+          open={this.state.onAddNew} 
+          onClose={this.toggleAddNewNote}
+        >
           <DialogTitle>
             <Typography>New Note</Typography>
           </DialogTitle>
@@ -516,20 +515,34 @@ export default class MainFeedPage extends Component {
               onChange={this.onNewNoteChange}
               value={this.state.title}
             />
-            <TextField
+            <ReactQuill
               id="content"
-              required
-              variant="outlined"
-              color="secondary"
-              margin="normal"
-              label="Content"
-              type="text"
-              fullWidth
-              multiline
-              rows="3"
-              rowsMax="10"
-              onChange={this.onNewNoteChange}
+              theme={null}
+              onChange={(value) => {
+                this.setState({
+                  content: value,
+                });
+              }}
               value={this.state.content}
+              modules={{
+                toolbar: [
+                  ["bold", "italic", "underline", "code"],
+                  [
+                    { list: "ordered" },
+                    { list: "bullet" },
+                  ],
+                  ["link"],
+                ],
+              }}
+              formats={[
+                "bold",
+                "italic",
+                "underline",
+                "code",
+                "list",
+                "bullet",
+                "link",
+              ]}
             />
             <Autocomplete
               id="lantool"
