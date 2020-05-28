@@ -38,7 +38,9 @@ import ClearIcon from '@material-ui/icons/Clear';
 import FilterListIcon from '@material-ui/icons/FilterList';
 import Note from "../Note";
 import Topbar from "../Topbar";
+import axios from "axios";
 const iconList = require("../Icons/list.json");
+
 
 export default class MainFeedPage extends Component {
   constructor(props) {
@@ -100,23 +102,41 @@ export default class MainFeedPage extends Component {
    * upon loading the component.
    */
   componentDidMount() {
-    //TODO: Fetch from remote database
+    
+    // get user id
+    // TODO: using localStorage for storing sensitive information is extremely dangerous
+    let id = window.localStorage.getItem("_id");
 
-    // TODO: remove mock data
-    let notes = [];
-    let notesMap = [];
-    let mockdata = require("../../mock.json");
-    mockdata.forEach((note) => {
-      // TODO: Replace time with _id
-      notes.push(
-        <Note key={note.time.toString()} data={note} detonate={this.detonate} />
-      );
-      notesMap.push(note.time.toString());
-    });
+    //fetch notes from remote database
+    axios
+    .get("https://darc-backend.herokuapp.com/api-note/getnotes", { 
+      params: {
+        user: id
+      }
+    })
+    .then((res) => {
+      let notes = [];
+      let notesMap = [];
 
-    this.setState({
-      notes: notes,
-      notesMap: notesMap,
+      // add notes to the container
+      res.data.forEach((note) => {
+        console.log(note)
+        notes.push(
+          <Note key={note._id} data={note} detonate={this.detonate} />
+        );
+        notesMap.push(note._id);
+      });
+
+      this.alertWithText("Successfully retrieved notes", "success");
+      this.setState({
+        notes: notes,
+        notesMap: notesMap,
+      });
+    })
+    .catch((error) => {
+      this.alertWithText("Failed to get notes", "error");
+      console.error(error);
+      return;
     });
   }
 
@@ -131,6 +151,7 @@ export default class MainFeedPage extends Component {
    * @param  reference reference related to new note
    */
   createNewNote = async (title, content, lantool, reference) => {
+
     let noteData = {
       title: title,
       content: content,
@@ -138,49 +159,59 @@ export default class MainFeedPage extends Component {
       time: new Date().getTime(),
       reference: reference,
     };
-    // TODO: Send request to the server to add new note
-    // TODO: do it synchronously
 
-    // fetch the _id of the new note
-    let _id = 69;
+    //TODO: saving user information in local storage is extremely dangerous
+    // add user id (objectId) to noteData
+    noteData.user = window.localStorage.getItem("_id"); 
 
-    // graphically update the notes
-    // put the _id also as it is needed for modifying the ntoe
+    // send request to the server to add new note and get the _id of new note
+    let _id = await axios
+    .post("https://darc-backend.herokuapp.com/api-note/create", noteData)
+    .catch((error) => {
+      this.alertWithText("Failed to add new note", "error");
+      console.error(error);
+      return;
+    });
+
+    // visually update the notes
+    // put the _id also as it is needed for modifying the note
     noteData.id = _id;
 
     // add the new note to the state
     let notes = this.state.notes;
     notes.unshift(
       <Note
-        key={noteData.time.toString()}
+        key={noteData.id}
         data={noteData}
         detonate={this.detonate}
       />
     );
-    // add the key also to the map
+    // also add the key to the map
     let map = this.state.notesMap;
-    map.unshift(noteData.time.toString()); // TODO: replace to id
+    map.unshift(noteData.id);
 
     // setState to rerender to update mainfeedpage
     this.setState({
       notes: notes,
       notesMap: map,
     });
+    this.alertWithText("Created new note", "success");
   };
 
   /**
-   * Helper function to remove the child component (note)
-   * TODO: replace time with _id
+   * Helper function to remove the child component (note).
+   * This method only removes the note visually from the client.
+   * The actual removal in the database is done in the Note component.
    *
-   * @param  time  currently, we are distinguishing note by time (TODO: use _id)
+   * @param  id  id of the note
    */
-  detonate = (time) => {
+  detonate = (id) => {
     let notes = this.state.notes;
     let notesMap = this.state.notesMap;
 
     // find the note with the correct key
     for (let i = 0; i < notesMap.length; i++) {
-      if (notesMap[i] === time.toString()) {
+      if (notesMap[i] === id) {
         // remove the current index from both map and array
         notesMap.splice(i, 1);
         notes.splice(i, 1);
@@ -251,7 +282,8 @@ export default class MainFeedPage extends Component {
       this.alertWithText("Please choose a language or tool", "error");
       return;
     }
-
+    this.alertWithText("Creating new note", "info");
+    
     // call the function for adding note graphically and also in the server
     this.createNewNote(
       this.state.title,

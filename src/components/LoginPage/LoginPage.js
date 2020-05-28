@@ -39,7 +39,7 @@ export default class LoginPage extends Component {
    * If successful, redirect the user to main feed page.
    * If not, display an error message.
    */
-  registerNewUser = async () => {
+  saveUserSession = async () => {
 
     // TODO: for some reason, the getIP() is returning a undefined variable even if the ip address successfully prints on console
     this.alertWithMessage("Authentication successful", "success");
@@ -147,9 +147,14 @@ export default class LoginPage extends Component {
         password: this.state.pw,
       })
       .then((response) => {
+
+        // get user id from response
+        // TODO: very dangerous but for now, store it in localStorage
+        window.localStorage.setItem("_id", response.data);
+
         // save encrypted user's sessionid
         // and redirect to main feed page
-        this.registerNewUser();
+        this.saveUserSession();
       })
       .catch((error) => {
         // error from response

@@ -50,7 +50,11 @@ const monthNames = [
 export default class Post extends Component {
   constructor(props) {
     super(props);
+    
+    let date = new Date(parseInt(props.data.time));
+
     this.state = {
+      id: props.data._id,
       title: props.data.title,
       content: props.data.content,
       lantool: props.data.lantool,
@@ -58,28 +62,13 @@ export default class Post extends Component {
       tempContent: props.data.content,
       tempLantool: props.data.lantool,
       tempReference: props.data.reference,
-      time: props.data.time,
-      formattedTime: "",
+      time: monthNames[date.getMonth()] + " " + date.getDate() + ", " + date.getFullYear(),
       reference: props.data.reference,
       openSubmenu: null,
       isEditNote: false,
       detonate: props.detonate,
     };
   }
-
-  /**
-   * Helper function to get the time format from the given time in miliseconds
-   */
-  getTime = (time) => {
-    let date = new Date(time);
-    return (
-      monthNames[date.getMonth()] +
-      " " +
-      date.getDate() +
-      ", " +
-      date.getFullYear()
-    );
-  };
 
   /**
    * Helper function to toggle the submenu when clicking on the top right menu icon
@@ -102,8 +91,8 @@ export default class Post extends Component {
   removeNote = () => {
     // TODO: Make call to the server
 
-    // destroy self
-    this.state.detonate(this.state.time);
+    // destroy self visually from the client
+    this.state.detonate(this.state.id);
     this.toggleSubmenu();
   };
 
@@ -249,7 +238,7 @@ export default class Post extends Component {
               </Grid>
             }
             title={this.state.title}
-            subheader={this.getTime(this.state.time)}
+            subheader={this.state.time}
             style={{marginBottom: "-3%", marginTop: "-2%"}}
           />
           <Divider/>
