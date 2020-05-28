@@ -28,6 +28,7 @@ export default class LoginPage extends Component {
       signup: false,
       notify: false,
       notification: "",
+      severity: ""
     };
 
     // TODO: Auto login
@@ -41,10 +42,14 @@ export default class LoginPage extends Component {
   registerNewUser = async () => {
 
     // TODO: for some reason, the getIP() is returning a undefined variable even if the ip address successfully prints on console
+    this.alertWithMessage("Authentication successful", "success");
 
-    this.setState({
-      successful: true,
-    });
+    // redirect in 500 ms
+    setTimeout(() => {
+      this.setState({
+        successful: true,
+      });
+    }, 500);
     return;
 
     // get the ip address of the user
@@ -55,7 +60,7 @@ export default class LoginPage extends Component {
     // check ip
     if (ip === null || typeof ip === "undefined" || ip.length <= 0) {
       console.log("ip : " + ip);
-      this.alertWithMessage("Error while authenticating");
+      this.alertWithMessage("Error while authenticating", "error");
       return;
     }
 
@@ -97,9 +102,7 @@ export default class LoginPage extends Component {
         return results[1];
       })
       .catch((error) => {
-        this.alertWithMessage(
-          "Unable to use cdn-cgi/trace please contact developer"
-        );
+        this.alertWithMessage("Unable to use cdn-cgi/trace please contact developer", "error");
         console.error(error);
       });
   };
@@ -120,7 +123,7 @@ export default class LoginPage extends Component {
         pw: event.target.value,
       });
     } else {
-      this.alertWithMessage("Error");
+      this.alertWithMessage("Error", "error");
     }
   };
 
@@ -130,6 +133,7 @@ export default class LoginPage extends Component {
   handleLogin = (event) => {
     // prevent defualt behavior of form submit
     event.preventDefault();
+    this.alertWithMessage("Authenticating", "info");
 
     // validate locally
     if (!this.validateEmailAndPW()) {
@@ -153,7 +157,7 @@ export default class LoginPage extends Component {
           typeof error.response !== "undefined" &&
           typeof error.response.data !== "undefined"
         ) {
-          this.alertWithMessage(error.response.data);
+          this.alertWithMessage(error.response.data, "error");
         }
         // error related to axios
         else {
@@ -171,20 +175,20 @@ export default class LoginPage extends Component {
   validateEmailAndPW = () => {
     // basic parameter validation (email, pw)
     if (!this.state.email.match(/[a-z0-9A-Z]+@[a-z0-9A-Z]+\.[a-z0-9A-Z]+/g)) {
-      this.alertWithMessage("Email Incorrect");
+      this.alertWithMessage("Email Incorrect", "error");
       return false;
     }
     if (this.state.pw.length < 8) {
-      this.alertWithMessage("Password is too short");
+      this.alertWithMessage("Password is too short", "error");
       return false;
     }
     // check alphanumeric
     if (!this.state.pw.match(/[0-9]+/g)) {
-      this.alertWithMessage("Password must include atleast one number");
+      this.alertWithMessage("Password must include atleast one number", "error");
       return false;
     }
     if (!this.state.pw.match(/[a-zA-Z]+/g)) {
-      this.alertWithMessage("Password must include atleast one alphabet");
+      this.alertWithMessage("Password must include atleast one alphabet", "error");
       return false;
     }
 
@@ -206,11 +210,13 @@ export default class LoginPage extends Component {
    * Show alert with custom message.
    *
    * @param  message  the message to display on the alert
+   * @param  severity type of alert
    */
-  alertWithMessage = (message) => {
+  alertWithMessage = (message, severity) => {
     this.setState({
       notify: true,
       notification: message,
+      severity: severity
     });
   };
   closeAlert = () => {
@@ -247,7 +253,7 @@ export default class LoginPage extends Component {
           autoHideDuration={3000}
           onClose={this.closeAlert}
         >
-          <Alert variant="filled" onClose={this.closeAlert} severity="error">
+          <Alert variant="filled" onClose={this.closeAlert} severity={this.state.severity}>
             {this.state.notification}
           </Alert>
         </Snackbar>
