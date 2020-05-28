@@ -103,6 +103,8 @@ export default class MainFeedPage extends Component {
    */
   componentDidMount() {
     
+    this.alertWithText("Retrieving notes", "info");
+
     // get user id
     // TODO: using localStorage for storing sensitive information is extremely dangerous
     let id = window.localStorage.getItem("_id");
@@ -140,9 +142,8 @@ export default class MainFeedPage extends Component {
   }
 
   /**
-   * This is a helper function that will be passed on to Topbar.
-   * Topbar will call this function to add the notes visually
-   * and also to the server.
+   * This is a method to create a new note both visually and also
+   * in the database.
    *
    * @param  title     title of the new note
    * @param  content   content of new note
@@ -178,7 +179,7 @@ export default class MainFeedPage extends Component {
 
     // add the new note to the state
     let notes = this.state.notes;
-    notes.unshift(
+    notes.push(
       <Note
         key={noteData.id}
         data={noteData}
@@ -187,7 +188,7 @@ export default class MainFeedPage extends Component {
     );
     // also add the key to the map
     let map = this.state.notesMap;
-    map.unshift(noteData.id);
+    map.push(noteData.id);
 
     // setState to rerender to update mainfeedpage
     this.setState({
@@ -293,6 +294,8 @@ export default class MainFeedPage extends Component {
 
     // close the dialog for adding new note
     this.toggleAddNewNote();
+    // close the dial menu
+    this.closeSpeedDialMenu();
 
     // empty the title, content, lantool, reference for
     // creating a new note next time
@@ -302,9 +305,6 @@ export default class MainFeedPage extends Component {
       lantool: "",
       reference: "",
     });
-
-    // close the dial menu
-    this.closeSpeedDialMenu();
   };
 
   /**
@@ -490,7 +490,7 @@ export default class MainFeedPage extends Component {
         <Grid
           item
           container
-          direction="column"
+          direction="column-reverse"
           justify="center"
           alignItems="center"
           spacing={1}
