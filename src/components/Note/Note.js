@@ -243,7 +243,9 @@ export default class Post extends Component {
           />
           <Divider/>
           <CardContent>
-            <Typography variant="body2">{this.state.content}</Typography>
+            <Typography variant="body2">
+              <div dangerouslySetInnerHTML={{__html: this.state.content}}/>
+            </Typography>
           </CardContent>
           {this.state.reference === "" ? (
             <div />
