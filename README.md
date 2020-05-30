@@ -4,18 +4,19 @@ Darc is a web application for archiving your notes and references related to deb
 
 # Core Features! (WIP)
 
-  - Basic authentication / registration / profile management
-  - Create / remove / edit notes
-  - Search / filter notes
-  - Export notes
-  - Encrypt everything
+  - Basic authentication (✔️) / registration (✔️) / profile management (🚧)
+  - Create (✔️) / remove (🚧) / edit notes (🚧)
+  - Search (🚧) / filter notes (⛔)
+  - Export notes (⛔)
+  - Encrypt everything (⛔)
 
 # New Feature Plans
 
+  - Add tags to the note (ex: name of the project, etc.)
   - Share your notes in read-only mode using a unique URL
   - Search not only for notes, but also on [Stackoverflow]
     - When the post that you have searched through Darc on [Stackoverflow] is interesting, 
-      you can mark it as good and quickly make a Darc note about it
+      you can mark it as good and quickly make a note about it
   - Make the web application a Progressive Web Application
   - Link to [Github] to indicate which repo the note is related to
 
