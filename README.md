@@ -1,8 +1,11 @@
+![Darc Logo][Logo]
+
 # Darc
 
-Darc is a web application for archiving your notes and references related to debugging. The ideal usage is to use Darc side by side as users learn a new language or work on a new type of project. I am currently developing on Darc and am open to any ideas on features and also feedbacks on my code.
+Darc is a web application for archiving your notes and references related to debugging. The ideal usage is to use Darc side by side as users learn a new language or work on a new type of project. I am currently developing on Darc and am open to any ideas on features and also feedbacks on my code.  
+Darc is now being hosted on [Heroku]! It has the bare minimum, but it is something!  
 
-# Core Features! (WIP)
+## Core Features! (WIP)
 
   - Basic authentication (✔️) / registration (✔️) / profile management (🚧)
   - Create (✔️) / remove (🚧) / edit notes (🚧)
@@ -10,7 +13,7 @@ Darc is a web application for archiving your notes and references related to deb
   - Export notes (⛔)
   - Encrypt everything (⛔)
 
-# New Feature Plans
+## New Feature Plans
 
   - Add tags to the note (ex: name of the project, etc.)
   - Share your notes in read-only mode using a unique URL
@@ -20,7 +23,7 @@ Darc is a web application for archiving your notes and references related to deb
   - Make the web application a Progressive Web Application
   - Link to [Github] to indicate which repo the note is related to
 
-### Tech
+## Tech
 
 Darc uses the following tools and frameworks :
 
@@ -29,7 +32,7 @@ Darc uses the following tools and frameworks :
 * [node.js], [Express], [Mongoose] - quick and easy backend server
 * [MongoDB] - general purpose, document-based, distributed database
 
-### Installation
+## Installation
 
 Currently, Darc does not need any installation. However, I plan to make it into a PWA so that the app can be easily accessible on variable platforms.
 
@@ -46,6 +49,8 @@ This README was written with reference to the template in [Dillinger] : an onlin
 
 [//]: # (These are reference links used in the body of this note and get stripped out when the markdown processor does its job. There is no need to format nicely because it shouldn't be seen. Thanks SO - http://stackoverflow.com/questions/4823468/store-comments-in-markdown-syntax)
     
+   [Logo]: <https://i.imgur.com/nwSfy2D.png>
+   [Heroku]: <https://thinkty-darc.herokuapp.com/>
    [Stackoverflow]: <https://api.stackexchange.com/docs/search>
    [ReactJS]: <https://reactjs.org/>
    [Material-UI]: <https://material-ui.com/>
