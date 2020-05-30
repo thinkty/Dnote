@@ -4,6 +4,8 @@
 
 Darc is a web application for archiving your notes and references related to debugging. The ideal usage is to use Darc side by side as users learn a new language or work on a new type of project. I am currently developing on Darc and am open to any ideas on features and also feedbacks on my code.  
 Darc is now being hosted on [Heroku]! It has the bare minimum, but it is something!  
+Below is the main page of Darc. As you can see, I am trying to make it mobile friendly as well.  
+![Darc_MainPage][MainPage]
 
 ## Core Features! (WIP)
 
@@ -49,6 +51,7 @@ This README was written with reference to the template in [Dillinger] : an onlin
 
 [//]: # (These are reference links used in the body of this note and get stripped out when the markdown processor does its job. There is no need to format nicely because it shouldn't be seen. Thanks SO - http://stackoverflow.com/questions/4823468/store-comments-in-markdown-syntax)
     
+   [MainPage]: <https://imgur.com/5DAjneI.png>
    [Logo]: <https://i.imgur.com/nwSfy2D.png>
    [Heroku]: <https://thinkty-darc.herokuapp.com/>
    [Stackoverflow]: <https://api.stackexchange.com/docs/search>
