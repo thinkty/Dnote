@@ -7,9 +7,11 @@ import React from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { ThemeProvider, createMuiTheme } from "@material-ui/core";
 import LoginPage from "./components/LoginPage";
+import SearchPage from "./components/SearchPage";
 import MainPage from "./components/MainFeedPage";
 import ProfilePage from "./components/ProfilePage";
 import RegisterPage from "./components/RegisterPage";
+
 import "typeface-muli"; 
 
 // TODO: : add localstorage event listener to change the colors and customize
@@ -49,6 +51,7 @@ export default function App() {
           <Route exact path="/home" component={MainPage} />
           <Route exact path="/register" component={RegisterPage} />
           <Route exact path="/home/profile" component={ProfilePage} />
+          <Route exact path="/home/search" component={SearchPage} />
         </Switch>
       </Router>
     </ThemeProvider>

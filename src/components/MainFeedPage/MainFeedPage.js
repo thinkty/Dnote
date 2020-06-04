@@ -59,9 +59,8 @@ export default class MainFeedPage extends Component {
       alertType: "",
       alertMessage: "",
       toggleMenu: true,
-      isSearchEnabled: false,
-      enableTopbar: false,
-      toProfilePage: false,
+      isFilterEnabled: false,
+      redirect: "",
       onAddNew: false,
       title: "",
       content: "",
@@ -76,17 +75,25 @@ export default class MainFeedPage extends Component {
         {
           icon: <SearchIcon color="secondary" />,
           name: "Search",
-          onClick: this.enableSearch,
+          onClick: () => {
+            this.setState({ redirect: "search" });
+          },
         },
         {
           icon: <FilterListIcon color="secondary" />,
           name: "Filter",
-          onClick: this.enableFilter,
+          onClick: () => {
+            this.setState({ isFilterEnabled: !this.state.isFilterEnabled });
+            this.alertWithText("Filter feature is not ready", "info");
+            // TODO: 
+          }
         },
         {
           icon: <PersonIcon color="secondary" />,
           name: "Profile",
-          onClick: this.toProfilePage,
+          onClick: () => {
+            this.setState({ redirect: "profile" });
+          },
         },
         {
           icon: <ExitToAppIcon color="secondary" />,
@@ -324,26 +331,6 @@ export default class MainFeedPage extends Component {
   };
 
   /**
-   * Enable the Search UI component. (topbar)
-   */
-  enableSearch = () => {
-    this.setState({ isSearchEnabled: !this.state.isSearchEnabled });
-  };
-
-  enableFilter = () => {
-    // TODO: enable filter bar
-    // in a filter bar, one should be able to filter by title, time, lantool
-    this.alertWithText("Filter feature is not ready", "info");
-  };
-
-  /**
-   * Handler for redirecting the user to the profile management page
-   */
-  toProfilePage = () => {
-    this.setState({ toProfilePage: true });
-  };
-
-  /**
    * Helper function for opening and closing the speed dial menu
    */
   openSpeedDialMenu = () => {
@@ -376,14 +363,16 @@ export default class MainFeedPage extends Component {
 
   render() {
     // redirection to the profile page
-    if (this.state.toProfilePage) {
+    if (this.state.redirect === "profile") {
       return <Redirect from="/home" push to="/home/profile" />;
+    } else if (this.state.redirect === "search") {
+      return <Redirect from="/home" push to="/home/search" />;
     }
 
     return (
       <div>
         {/* Search bar in the top */}
-        <Fade in={this.state.isSearchEnabled}>
+        <Fade in={this.state.isFilterEnabled}>
           <div>
             <AppBar
               position="fixed"
@@ -398,13 +387,13 @@ export default class MainFeedPage extends Component {
                 alignItems="center"
               >
                 <Toolbar>
-                  <Topbar enabled={this.state.isSearchEnabled} />
+                  <Topbar enabled={this.state.isFilterEnabled} />
                 </Toolbar>
                 <IconButton
                   // disable search topbar on click
                   onClick={() => {
                     this.setState({
-                      isSearchEnabled: false,
+                      isFilterEnabled: false,
                     });
                   }}
                 >

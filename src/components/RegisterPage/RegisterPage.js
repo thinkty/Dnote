@@ -37,12 +37,12 @@ export default class RegisterPage extends Component {
    */
   handleChange = (event) => {
     // based on the id, update email or pw
-    if (event.target.id === "email") {
+    if (event.target.id === "username") {
       this.setState({
         email: event.target.value,
         pw: this.state.pw,
       });
-    } else if (event.target.id === "pw") {
+    } else if (event.target.id === "password") {
       this.setState({
         email: this.state.email,
         pw: event.target.value,
@@ -212,9 +212,9 @@ export default class RegisterPage extends Component {
                 <Grid item xs>
                   <form onSubmit={this.handleRegister}>
                     <TextField
-                      id="email"
+                      id="username"
                       label="Email"
-                      type="email"
+                      type="text"
                       color="primary"
                       margin="dense"
                       value={this.state.email}
@@ -227,7 +227,7 @@ export default class RegisterPage extends Component {
                 <Grid item>
                   <form onSubmit={this.handleRegister}>
                     <TextField
-                      id="pw"
+                      id="password"
                       label="Password"
                       type="password"
                       color="primary"

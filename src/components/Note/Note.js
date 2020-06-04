@@ -243,7 +243,8 @@ export default class Post extends Component {
           />
           <Divider/>
           <CardContent>
-            <Typography variant="body2">
+            <Typography component="div" variant="body2">
+              {/* Making the Typography as div solves the warning of div inside p */}
               <div dangerouslySetInnerHTML={{__html: this.state.content}}/>
             </Typography>
           </CardContent>
