@@ -11,7 +11,7 @@ Below is the main page of Darc. As you can see, I am trying to make it mobile fr
 
   - Basic authentication (✔️) / registration (✔️) / profile management (🚧)
   - Create (✔️) / remove (🚧) / edit notes (🚧)
-  - Search (🚧) / filter notes (⛔)
+  - Search (✔️) / filter notes (⛔)
   - Export notes (⛔)
   - Encrypt everything (⛔)
 
